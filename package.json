@@ -1,0 +1,36 @@
+{
+  "name": "@dcl/ui-utils",
+  "version": "0.0.0-development",
+  "description": "A collection of UI helpers to make it easier to build a Decentraland scene using the SDK.",
+  "main": "index.ts",
+  "scripts": {
+    "semantic-release": "semantic-release"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/decentraland/decentraland-ui-utils.git"
+  },
+  "prettier": {
+    "printWidth": 100,
+    "singleQuote": true,
+    "semi": false
+  },
+  "keywords": [],
+  "author": "Decentraland",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/decentraland/decentraland-ui-utils/issues"
+  },
+  "homepage": "https://github.com/decentraland/decentraland-ui-utils#readme",
+  "devDependencies": {
+    "prettier": "^1.19.1",
+    "semantic-release": "^16.0.1",
+    "typescript": "^3.9.3"
+  },
+  "dependencies": {
+    "decentraland-ecs": "latest"
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}
