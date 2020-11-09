@@ -3,8 +3,15 @@ export class Dialog {
   fontSize?: number
   offsetX?: number
   offsetY?: number
+  typeSpeed?: number
+  isEndOfDialog?: boolean = false
+  triggeredByNext?: () => void
+  portrait?: ImageData
+  image?: ImageData
   isQuestion?: boolean = false
   isFixedScreen?: boolean = false
+  buttons?: ButtonData[]
+  // for backwards compatibility
   labelE?: {
     label: string
     fontSize?: number
@@ -21,10 +28,28 @@ export class Dialog {
   }
   ifPressF?: number
   triggeredByF?: () => void
-  isEndOfDialog?: boolean = false
-  triggeredByNext?: () => void
-  portrait?: ImageData
-  image?: ImageData
+}
+
+export type ButtonData = {
+  goToDialog: number
+  label: string
+  triggeredActions?: () => void
+  fontSize?: number
+  offsetX?: number
+  offsetY?: number
+}
+
+export enum ButtonStyles {
+  E = `e`,
+  F = `f`,
+  ROUNDBLACK = `roundblack`,
+  ROUNDWHITE = `roundwhite`,
+  ROUNDSILVER = `roundsilver`,
+  ROUNDGOLD = `roundgold`,
+  SQUAREBLACK = `squareblack`,
+  SQUAREWHITE = `squarewhite`,
+  SQUARESILVER = `squaresilver`,
+  SQUAREGOLD = `squaregold`,
 }
 
 export type NPCData = {
