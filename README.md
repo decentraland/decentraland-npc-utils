@@ -332,20 +332,20 @@ export let GemsMission: Dialog[] = [
     text: `Can you help me finding my missing gems?`,
 	isQuestion: true,
 	buttons: [
-		{
-			label: `Yes!`,
-			goToDialog: 2,
-			triggeredActions:  () => {
-				// NPC plays an animation to celebrate
-			}
-		},
-		{
-			label: `I'm busy`,
-			goToDialog: 4
-			triggeredActions:  () => {
-				// NPC waves goodbye
-			}
-		},
+	  {
+		label: `Yes!`,
+		goToDialog: 2,
+		triggeredActions:  () => {
+			// NPC plays an animation to celebrate
+		}
+	  },
+	  {
+		label: `I'm busy`,
+		goToDialog: 4
+		triggeredActions:  () => {
+			// NPC waves goodbye
+		}
+	  },
 	]
   },
   {
