@@ -64,13 +64,14 @@ export class DialogWindow {
   public activeTextId: number
   public uiTheme: Texture
   private UIOpenTime: number
+  public soundEnt: Entity
 
   canvas: UICanvas = canvas
   ClickAction: () => false | Subscription[]
   EButtonAction: () => false | Subscription[]
   FButtonAction: () => false | Subscription[]
 
-  constructor(defaultPortrait?: ImageData, useDarkTheme?: boolean | Texture) {
+  constructor(defaultPortrait?: ImageData, useDarkTheme?: boolean | Texture, sound?: string) {
     this.defaultPortrait = defaultPortrait ? defaultPortrait : null
 
     this.uiTheme =
@@ -151,6 +152,16 @@ export class DialogWindow {
     this.text.color = useDarkTheme ? Color4.White() : Color4.Black()
     this.text.isPointerBlocker = false
 
+    this.soundEnt = new Entity()
+
+    if (sound) {
+      this.soundEnt.addComponent(new Transform())
+      this.soundEnt.addComponent(new AudioSource(new AudioClip(sound)))
+      this.soundEnt.getComponent(AudioSource).volume = 0.5
+      engine.addEntity(this.soundEnt)
+      this.soundEnt.setParent(Attachable.AVATAR)
+    }
+
     this.button1 = new CustomDialogButton(
       this.container,
       this.uiTheme,
@@ -229,6 +240,10 @@ export class DialogWindow {
     this.activeTextId = textId
 
     let currentText = NPCScript[textId]
+
+    if (this.soundEnt.hasComponent(AudioSource)) {
+      this.soundEnt.getComponent(AudioSource).playOnce()
+    }
 
     // Set portrait
     // Looks for portrait in current text, otherwise use default portrait data
@@ -326,12 +341,11 @@ export class DialogWindow {
         ActionButton.POINTER,
         false,
         (e) => {
-          if (
-            this.isDialogOpen &&
-            !this.isQuestionPanel &&
-            !this.isFixedScreen &&
-            +Date.now() - this.UIOpenTime > 100
-          ) {
+          if (!this.isDialogOpen || +Date.now() - this.UIOpenTime < 100) return
+
+          if (!DialogTypeInSystem._instance.done) {
+            DialogTypeInSystem._instance.rush()
+          } else if (!this.isQuestionPanel && !this.isFixedScreen) {
             this.confirmText(ConfirmMode.Next)
           }
         }
@@ -341,7 +355,12 @@ export class DialogWindow {
         ActionButton.PRIMARY,
         false,
         (e) => {
-          if (this.isDialogOpen && this.isQuestionPanel && +Date.now() - this.UIOpenTime > 100) {
+          if (
+            this.isDialogOpen &&
+            this.isQuestionPanel &&
+            DialogTypeInSystem._instance.done &&
+            +Date.now() - this.UIOpenTime > 100
+          ) {
             this.confirmText(ConfirmMode.Confirm)
           }
         }
@@ -351,7 +370,12 @@ export class DialogWindow {
         ActionButton.SECONDARY,
         false,
         (e) => {
-          if (this.isDialogOpen && this.isQuestionPanel && +Date.now() - this.UIOpenTime > 100) {
+          if (
+            this.isDialogOpen &&
+            this.isQuestionPanel &&
+            DialogTypeInSystem._instance.done &&
+            +Date.now() - this.UIOpenTime > 100
+          ) {
             this.confirmText(ConfirmMode.Cancel)
           }
         }
@@ -424,6 +448,10 @@ export class DialogWindow {
     //this.text.value = currentText.text
     this.text.fontSize = currentText.fontSize ? currentText.fontSize : textSize
     this.text.positionY = currentText.offsetY ? currentText.offsetY + textYPos : textYPos
+
+    if (this.soundEnt.hasComponent(AudioSource)) {
+      this.soundEnt.getComponent(AudioSource).playOnce()
+    }
 
     DialogTypeInSystem._instance.newText(
       this.text,
@@ -681,19 +709,18 @@ export class DialogTypeInSystem implements ISystem {
     this.timer = 0
     this.done = false
 
-    if (speed) {
-      if (speed == 0) {
-        this.rush()
-      }
+    if (speed && speed <= 0) {
+      this.rush()
+    } else if (speed) {
       this.speed = speed
     } else {
       this.speed = DEFAULT_SPEED
     }
   }
   rush() {
+    this.done = true
     this.UIText.value = this.fullText
     this.visibleChars = this.fullText.length
-    this.done = true
   }
 }
 

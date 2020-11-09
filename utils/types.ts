@@ -64,6 +64,7 @@ export type NPCData = {
   darkUI?: boolean
   coolDownDuration?: number
   hoverText?: string
+  dialogSound?: string
 }
 
 export class Dialogs {

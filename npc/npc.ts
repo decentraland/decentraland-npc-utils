@@ -32,10 +32,11 @@ export class NPC extends Entity {
     if (data && data.portrait) {
       this.dialog = new DialogWindow(
         typeof data.portrait === `string` ? { path: data.portrait } : data.portrait,
-        data.darkUI
+        data.darkUI,
+        data.dialogSound ? data.dialogSound : null
       )
     } else {
-      this.dialog = new DialogWindow()
+      this.dialog = new DialogWindow(null, data.darkUI, data.dialogSound ? data.dialogSound : null)
     }
     this.addComponent(new Animator())
     if (data && data.idleAnim) {
@@ -92,13 +93,17 @@ export class NPC extends Entity {
         null,
         null,
         () => {
-          if (
-            this.inCooldown ||
+          if (this.inCooldown) {
+            log(this.name, ' in cooldown')
+            return
+          } else if (
             this.dialog.isDialogOpen ||
             (data && data.onlyExternalTrigger) ||
             (data && data.onlyClickTrigger)
-          )
+          ) {
             return
+          }
+
           this.activate()
         },
         () => {
