@@ -74,11 +74,7 @@ export class DialogWindow {
     this.defaultPortrait = defaultPortrait ? defaultPortrait : null
 
     this.uiTheme =
-      useDarkTheme && useDarkTheme.src
-        ? useDarkTheme
-        : useDarkTheme == true
-        ? darkTheme
-        : lightTheme
+      useDarkTheme instanceof Texture ? useDarkTheme : useDarkTheme == true ? darkTheme : lightTheme
     //this.uiTheme =useDarkTheme == true ? darkTheme : lightTheme
 
     // Container
@@ -164,6 +160,7 @@ export class DialogWindow {
       () => {
         this.confirmText(ConfirmMode.Confirm)
       },
+      false,
       ButtonStyles.E
     )
     this.button1.hide()
@@ -177,6 +174,7 @@ export class DialogWindow {
       () => {
         this.confirmText(ConfirmMode.Cancel)
       },
+      false,
       ButtonStyles.F
     )
     this.button2.hide()
@@ -190,6 +188,7 @@ export class DialogWindow {
       () => {
         this.confirmText(ConfirmMode.Button3)
       },
+      false,
       ButtonStyles.ROUNDSILVER
     )
     this.button3.hide()
@@ -203,6 +202,7 @@ export class DialogWindow {
       () => {
         this.confirmText(ConfirmMode.Button4)
       },
+      false,
       ButtonStyles.ROUNDSILVER
     )
     this.button4.hide()
@@ -621,18 +621,16 @@ export class DialogWindow {
   public closeDialogWindow(): void {
     if (this.isDialogOpen) {
       this.isDialogOpen = false
-      this.container.visible = false
+
       this.portrait.visible = false
+      this.text.value = ''
       this.text.visible = false
       this.button1.hide()
       this.button2.hide()
       this.button3.hide()
       this.button4.hide()
-      //   this.buttonE.visible = false
-      //   this.buttonELabel.visible = false
-      //   this.buttonF.visible = false
-      //   this.buttonFLabel.visible = false
       this.leftClickIcon.visible = false
+      this.container.visible = false
     }
   }
 }
@@ -640,7 +638,7 @@ export class DialogWindow {
 const DEFAULT_SPEED = 30
 
 export class DialogTypeInSystem implements ISystem {
-  private static _instance: DialogTypeInSystem | null = null
+  static _instance: DialogTypeInSystem | null = null
 
   timer: number = 0
   speed: number = DEFAULT_SPEED
@@ -684,6 +682,9 @@ export class DialogTypeInSystem implements ISystem {
     this.done = false
 
     if (speed) {
+      if (speed == 0) {
+        this.rush()
+      }
       this.speed = speed
     } else {
       this.speed = DEFAULT_SPEED
@@ -699,6 +700,8 @@ export class DialogTypeInSystem implements ISystem {
 export class CustomDialogButton extends Entity {
   label: UIText
   image: UIImage
+  icon: UIImage
+  style: ButtonStyles
   onClick: () => void
   constructor(
     parent: UIContainerRect,
@@ -708,6 +711,7 @@ export class CustomDialogButton extends Entity {
     posX: number,
     posY: number,
     onClick: () => void,
+    useDarkTheme?: boolean,
     style?: ButtonStyles
   ) {
     super()
@@ -718,6 +722,7 @@ export class CustomDialogButton extends Entity {
     this.image.height = 46
 
     this.label = new UIText(this.image)
+    this.style = style
 
     this.onClick = onClick
 
@@ -726,10 +731,32 @@ export class CustomDialogButton extends Entity {
         case ButtonStyles.E:
           setSection(this.image, resources.buttons.buttonE)
           this.label.positionX = 25
+
+          this.icon = new UIImage(this.image, useDarkTheme == true ? darkTheme : lightTheme)
+          this.icon.width = 26
+          this.icon.height = 26
+          // this.button1Icon.positionY = 15
+          this.icon.hAlign = 'center'
+          this.icon.vAlign = 'center'
+          this.icon.isPointerBlocker = false
+          setSection(this.icon, resources.buttonLabels.E)
+          this.icon.positionX = buttonIconPos(label.length)
+
           break
         case ButtonStyles.F:
           setSection(this.image, resources.buttons.buttonF)
           this.label.positionX = 25
+
+          this.icon = new UIImage(this.image, useDarkTheme == true ? darkTheme : lightTheme)
+          this.icon.width = 26
+          this.icon.height = 26
+          // this.button1Icon.positionY = 15
+          this.icon.hAlign = 'center'
+          this.icon.vAlign = 'center'
+          this.icon.isPointerBlocker = false
+          setSection(this.icon, resources.buttonLabels.F)
+          this.icon.positionX = buttonIconPos(label.length)
+
           break
         case ButtonStyles.ROUNDBLACK:
           setSection(this.image, resources.buttons.roundBlack)
@@ -813,8 +840,17 @@ export class CustomDialogButton extends Entity {
     this.label.value = label
     this.image.positionX = posX
     this.image.positionY = posY
+
+    if (this.style == ButtonStyles.E || this.style == ButtonStyles.F) {
+      this.icon.positionX = buttonIconPos(label.length)
+    }
   }
 }
 
 let dummyQuestionDelays = new Entity()
 engine.addEntity(dummyQuestionDelays)
+
+export function buttonIconPos(textLen: number) {
+  let pos = -10 - textLen * 4
+  return pos > -65 ? pos : -65
+}

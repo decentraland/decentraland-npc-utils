@@ -70,6 +70,20 @@ export default {
       sourceTop: 567,
     },
   },
+  buttonLabels: {
+    E: {
+      sourceWidth: 26,
+      sourceHeight: 26,
+      sourceLeft: 697,
+      sourceTop: 611,
+    },
+    F: {
+      sourceWidth: 26,
+      sourceHeight: 26,
+      sourceLeft: 733,
+      sourceTop: 611,
+    },
+  },
   backgrounds: {
     promptBackground: {
       sourceWidth: 416,
