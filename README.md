@@ -79,6 +79,7 @@ To configure other properties of an NPC, add a fourth argument as an `NPCData` o
 - `faceUser`: _(boolean)_ Set if the NPC rotates to face the user while active.
 - `portrait`: _(string_ or _ImageData)_ 2D image to show on the left-hand side of the dialog window. The structure of an `ImageData` object is described in detail below.
 - `darkUI`: _(boolean)_ If true, the dialog UI uses the dark theme.
+- `dialogSound`: _(string)_ Path to sound file to play once for every line of dialog read on the UI.
 - `coolDownDuration`: _(number)_ Change the cooldown period for activating the NPC again. The number is in seconds.
 - `hoverText`: _(string)_ Set the UI hover feedback when pointing the cursor at the NPC. _TALK_ by default.
 - `onlyClickTrigger`: _(boolean)_ If true, the NPC can't be activated by walking near. Just by clicking on it or calling its `activate()` function.
@@ -222,27 +223,14 @@ class Dialog {
   fontSize?: number
   offsetX?: number
   offsetY?: number
-  isQuestion?: boolean = false
-  labelE?: {
-    label: string
-    fontSize?: number
-    offsetX?: number
-    offsetY?: number
-  }
-  ifPressE?: number
-  triggeredByE?: () => void
-  labelF?: {
-    label: string
-    fontSize?: number
-    offsetX?: number
-    offset?: number
-  }
-  ifPressF?: number
-  triggeredByF?: () => void
   isEndOfDialog?: boolean = false
   triggeredByNext?: () => void
-  portrait?: Portrait
-  image?: Portrait
+  portrait?: ImageData
+  image?: ImageData
+  typeSpeed?: number
+  isQuestion?: boolean = false
+  isFixedScreen?: boolean = false
+  buttons?: ButtonData[]
 }
 ```
 
@@ -264,19 +252,38 @@ The `ImageData` required for the `portrait` and `image` fields, may include the 
 - `height`: The height to show the image onscreen.
 - `section`: Use only a section of the image file, useful when arranging multiple icons into an image atlas. This field takes an `ImageSection` object, specifying `sourceWidth` and `sourceHeight`, and optionally also `sourceLeft` and `sourceTop`.
 
+Other fields:
+
+- `buttons`: An array of buttons to use in a question entry, covered in the next section.
+- `typeSpeed`: The text appears one character at a time, simulating as if the NPC is typing it. Players can click to speed through this animation. This field lets you tune the speed of this typing to go slower or faster. The default is 30. Set `typeSpeed` to _-1_ to skip the animation.
+
+<img src="screenshots/NPC4.gif" width="500">
+
 #### Questions and conversation trees
 
-The script can include questions that prompt the player to pick between two options. These questions can branch the conversation out and trigger other actions in the scene.
+The script can include questions that prompt the player to pick between two or up to four options. These questions can branch the conversation out and trigger other actions in the scene.
 
 <img src="screenshots/NPC2.png" width="500">
 
-To make an entry a question, set the `isQuestion` field to _true_. This displays two buttons rather than the click icon. It also disables the click to advance to the next entry.
+To make an entry a question, set the `isQuestion` field to _true_. This displays a set of buttons rather than the click icon. It also disables the click to advance to the next entry.
 
-When on a question entry, you can customize the following:
+The `buttons` property of an entry contains an array of `ButtonData` objects, each one of these defines one button.
 
-- Set the label of either of the buttons, including text, size and alignment.
-- With the `ifPressE` and `ifPressF` you specify the index of the next dialog entry to display.
-- With `triggeredByE` and `triggeredByF` you can provide an additional function that gets run whenever the option is picked.
+When on a question entry, you must provide at least the following for each button:
+
+- `label`: _(string)_ The label to show on the button.
+- `goToDialog`: _(number)_ The index of the next dialog entry to display when activated.
+
+You can also set the following:
+
+- `triggeredActions`: _( () => void )_ An additional function to run whenever the button is activated
+- `fontSize`: _(number)_ Font size of the text
+- `offsetX`: _(number)_ Label offset in X
+- `offsetY`: _(number)_ Label offset in Y
+
+All buttons can be clicked to activate them. Additionally, the first button in the array can be activated by pressing the _E_ key. The second button in the array can be activated by pressing the _F_ key,
+
+<img src="screenshots/NPC3.png" width="500">
 
 ```ts
 export let GemsMission: Dialog[] = [
@@ -286,10 +293,10 @@ export let GemsMission: Dialog[] = [
   {
     text: `Can you help me finding my missing gems?`,
     isQuestion: true,
-    labelE: { label: `Yes!`, offsetX: 12 },
-    labelF: { label: `I'm busy`, offsetX: 12 },
-    ifPressE: 2,
-    ifPressF: 4,
+    buttons: [
+      { label: `Yes!`, goToDialog: 2 },
+      { label: `I'm busy`, goToDialog: 4 },
+    ],
   },
   {
     text: `Ok, awesome, thanks!`,
@@ -311,9 +318,7 @@ You can run functions that may affect any other part of your scene, that get tri
 
 - `triggeredByNext`: Is executed when the player advances to the next dialog on a non-question dialog. The function also gets called if the dialog is the end of the conversation.
 
-- `triggeredByE`: Is executed on a question dialog if the player hits the E key or clicks on the corresponding button.
-
-- `triggeredByF`: Is executed on a question dialog if the player hits the F key or clicks on the corresponding button.
+- `triggeredActions`: This property is associated to a button and is executed on a question dialog if the player activates the corresponding button. You can have up to 4 different buttons per entry, each with its own actions.
 
 ```ts
 export let GemsMission: Dialog[] = [
@@ -325,17 +330,23 @@ export let GemsMission: Dialog[] = [
   },
    {
     text: `Can you help me finding my missing gems?`,
-    isQuestion: true,
-    labelE: { label: `Yes!`, offsetX: 12 },
-    labelF: { label: `I'm busy`, offsetX: 12 },
-    ifPressE: 2,
-	ifPressF: 4,
-	triggeredByE: () => {
-		// NPC plays an animation to celebrate
-	}
-	triggeredByF: () => {
-		// NPC waves goodbye
-	}
+	isQuestion: true,
+	buttons: [
+		{
+			label: `Yes!`,
+			goToDialog: 2,
+			triggeredActions:  () => {
+				// NPC plays an animation to celebrate
+			}
+		},
+		{
+			label: `I'm busy`,
+			goToDialog: 4
+			triggeredActions:  () => {
+				// NPC waves goodbye
+			}
+		},
+	]
   },
   {
     text: `Ok, awesome, thanks!`,

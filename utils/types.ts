@@ -11,23 +11,6 @@ export class Dialog {
   isQuestion?: boolean = false
   isFixedScreen?: boolean = false
   buttons?: ButtonData[]
-  // for backwards compatibility
-  labelE?: {
-    label: string
-    fontSize?: number
-    offsetX?: number
-    offsetY?: number
-  }
-  ifPressE?: number
-  triggeredByE?: () => void
-  labelF?: {
-    label: string
-    fontSize?: number
-    offsetX?: number
-    offset?: number
-  }
-  ifPressF?: number
-  triggeredByF?: () => void
 }
 
 export type ButtonData = {
