@@ -1,5 +1,5 @@
 import { DialogWindow } from '../ui/index'
-import { Dialog } from '../utils/types'
+import { Dialog, NPCData } from '../utils/types'
 import { TrackUserSlerp } from './faceUserSystem'
 
 import { TriggerSphereShape, NPCTriggerComponent } from '../trigger/triggerSystem'

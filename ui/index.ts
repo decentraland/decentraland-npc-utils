@@ -410,7 +410,11 @@ export class DialogWindow {
 
     if (mode == ConfirmMode.Confirm) {
       if (currentText.buttons.length >= 1) {
-        this.activeTextId = currentText.buttons[0].goToDialog
+        if (typeof currentText.buttons[0].goToDialog === 'number') {
+          this.activeTextId = currentText.buttons[0].goToDialog
+        } else {
+          this.activeTextId = findDialogByName(this.NPCScript, currentText.buttons[0].goToDialog)
+        }
         if (currentText.buttons[0].triggeredActions) {
           currentText.buttons[0].triggeredActions()
         }
@@ -419,7 +423,11 @@ export class DialogWindow {
 
     if (mode == ConfirmMode.Cancel) {
       if (currentText.buttons.length >= 2) {
-        this.activeTextId = currentText.buttons[1].goToDialog
+        if (typeof currentText.buttons[1].goToDialog === 'number') {
+          this.activeTextId = currentText.buttons[1].goToDialog
+        } else {
+          this.activeTextId = findDialogByName(this.NPCScript, currentText.buttons[1].goToDialog)
+        }
         if (currentText.buttons[1].triggeredActions) {
           currentText.buttons[1].triggeredActions()
         }
@@ -428,7 +436,11 @@ export class DialogWindow {
 
     if (mode == ConfirmMode.Button3) {
       if (currentText.buttons.length >= 3) {
-        this.activeTextId = currentText.buttons[2].goToDialog
+        if (typeof currentText.buttons[2].goToDialog === 'number') {
+          this.activeTextId = currentText.buttons[2].goToDialog
+        } else {
+          this.activeTextId = findDialogByName(this.NPCScript, currentText.buttons[2].goToDialog)
+        }
         if (currentText.buttons[2].triggeredActions) {
           currentText.buttons[2].triggeredActions()
         }
@@ -437,7 +449,11 @@ export class DialogWindow {
 
     if (mode == ConfirmMode.Button4) {
       if (currentText.buttons.length >= 4) {
-        this.activeTextId = currentText.buttons[3].goToDialog
+        if (typeof currentText.buttons[3].goToDialog === 'number') {
+          this.activeTextId = currentText.buttons[3].goToDialog
+        } else {
+          this.activeTextId = findDialogByName(this.NPCScript, currentText.buttons[3].goToDialog)
+        }
         if (currentText.buttons[3].triggeredActions) {
           currentText.buttons[3].triggeredActions()
         }
@@ -878,3 +894,12 @@ export class CustomDialogButton extends Entity {
 
 let dummyQuestionDelays = new Entity()
 engine.addEntity(dummyQuestionDelays)
+
+function findDialogByName(dialogs: Dialog[], name: string) {
+  for (let i = 0; i < dialogs.length; i++) {
+    if (dialogs[i].name && dialogs[i].name == name) {
+      return i
+    }
+  }
+  return 0
+}

@@ -255,7 +255,7 @@ The `ImageData` required for the `portrait` and `image` fields, may include the 
 Other fields:
 
 - `buttons`: An array of buttons to use in a question entry, covered in the next section.
-- `typeSpeed`: The text appears one character at a time, simulating as if the NPC is typing it. Players can click to speed through this animation. This field lets you tune the speed of this typing to go slower or faster. The default is 30. Set `typeSpeed` to _-1_ to skip the animation.
+- `typeSpeed`: The text appears one character at a time, simulating typing. Players can click to skip the animation. Tune the speed of this typing (30 by default) to go slower or faster. Set to _-1_ to skip the animation.
 
 <img src="screenshots/NPC4.gif" width="500">
 
@@ -272,14 +272,14 @@ The `buttons` property of an entry contains an array of `ButtonData` objects, ea
 When on a question entry, you must provide at least the following for each button:
 
 - `label`: _(string)_ The label to show on the button.
-- `goToDialog`: _(number)_ The index of the next dialog entry to display when activated.
+- `goToDialog`: _(number | string)_ The index or name of the next dialog entry to display when activated.
 
 You can also set the following:
 
 - `triggeredActions`: _( () => void )_ An additional function to run whenever the button is activated
 - `fontSize`: _(number)_ Font size of the text
-- `offsetX`: _(number)_ Label offset in X
-- `offsetY`: _(number)_ Label offset in Y
+- `offsetX`: _(number)_ Offset of the label on the X axis, relative to its normal position.
+- `offsetY`: _(number)_ Offset of the label on the Y axis, relative to its normal position.
 
 All buttons can be clicked to activate them. Additionally, the first button in the array can be activated by pressing the _E_ key. The second button in the array can be activated by pressing the _F_ key,
 
