@@ -21,6 +21,18 @@ export default {
       sourceLeft: 512,
       sourceTop: 612,
     },
+    buttonRed: {
+      sourceWidth: 174,
+      sourceHeight: 46,
+      sourceLeft: 512,
+      sourceTop: 662,
+    },
+    buttonDark: {
+      sourceWidth: 174,
+      sourceHeight: 46,
+      sourceLeft: 512,
+      sourceTop: 612,
+    },
     roundBlack: {
       sourceWidth: 128,
       sourceHeight: 32,

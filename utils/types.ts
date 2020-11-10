@@ -25,6 +25,8 @@ export type ButtonData = {
 export enum ButtonStyles {
   E = `e`,
   F = `f`,
+  DARK = `dark`,
+  RED = `red`,
   ROUNDBLACK = `roundblack`,
   ROUNDWHITE = `roundwhite`,
   ROUNDSILVER = `roundsilver`,
