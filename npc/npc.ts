@@ -153,7 +153,7 @@ export class NPC extends Entity {
     }
   }
 
-  talk(script: Dialog[], startIndex?: number, duration?: number) {
+  talk(script: Dialog[], startIndex?: number | string, duration?: number) {
     this.introduced = true
     this.inCooldown = true
     if (this.closeDialogTimer.hasComponent(NPCDelay)) {

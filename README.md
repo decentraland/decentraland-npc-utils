@@ -134,7 +134,7 @@ To start a conversation with the NPC using the dialog UI, call the `talk()` func
 
 It can also take the following optional parameters:
 
-- `startIndex`: _(number)_ The _Dialog_ object from the `script` array to open first. By default this is _0_, the first element of the array.
+- `startIndex`: _(number | string)_ The _Dialog_ object from the `script` array to open first. By default this is _0_, the first element of the array. Pass a number to open the entry on a given array position, or pass a string to open the entry with a `name` property matching that string.
 - `duration`: _(number)_ Number of seconds to wait before closing the dialog window. If no value is set, the window is kept open till the player reaches the end of the conversation or something else closes it.
 
 ```ts
@@ -220,6 +220,7 @@ The script must adhere to the following schema:
 ```ts
 class Dialog {
   text: string
+  name? string
   fontSize?: number
   offsetX?: number
   offsetY?: number
@@ -254,6 +255,7 @@ The `ImageData` required for the `portrait` and `image` fields, may include the 
 
 Other fields:
 
+- `name`: Optionally add a name to an entry, this serves to more easily refer to an entry.
 - `buttons`: An array of buttons to use in a question entry, covered in the next section.
 - `typeSpeed`: The text appears one character at a time, simulating typing. Players can click to skip the animation. Tune the speed of this typing (30 by default) to go slower or faster. Set to _-1_ to skip the animation.
 
@@ -273,6 +275,8 @@ When on a question entry, you must provide at least the following for each butto
 
 - `label`: _(string)_ The label to show on the button.
 - `goToDialog`: _(number | string)_ The index or name of the next dialog entry to display when activated.
+
+> TIP: It's always better to refer to an entry by name, since the array index might shift if you add more entries and it can get hard to keep track of these references.
 
 You can also set the following:
 

@@ -237,13 +237,21 @@ export class DialogWindow {
     DialogTypeInSystem.createAndAddToEngine()
   }
 
-  public openDialogWindow(NPCScript: Dialog[], textId: number): void {
+  public openDialogWindow(NPCScript: Dialog[], textId?: number | string): void {
     this.UIOpenTime = +Date.now()
 
     this.NPCScript = NPCScript
-    this.activeTextId = textId
 
-    let currentText = NPCScript[textId]
+    if (!textId) {
+      this.activeTextId = 0
+    }
+    if (typeof textId === 'number') {
+      this.activeTextId = textId
+    } else {
+      this.activeTextId = findDialogByName(NPCScript, textId)
+    }
+
+    let currentText = NPCScript[this.activeTextId]
 
     if (this.soundEnt.hasComponent(AudioSource)) {
       this.soundEnt.getComponent(AudioSource).playOnce()
@@ -251,48 +259,48 @@ export class DialogWindow {
 
     // Set portrait
     // Looks for portrait in current text, otherwise use default portrait data
-    let hasPortrait = NPCScript[textId].portrait ? true : false
+    let hasPortrait = NPCScript[this.activeTextId].portrait ? true : false
 
     if (hasPortrait || this.defaultPortrait) {
       log(
         'setting portrait to ',
-        hasPortrait ? NPCScript[textId].portrait.path : this.defaultPortrait.path
+        hasPortrait ? NPCScript[this.activeTextId].portrait.path : this.defaultPortrait.path
       )
       this.portrait.source = new Texture(
-        hasPortrait ? NPCScript[textId].portrait.path : this.defaultPortrait.path
+        hasPortrait ? NPCScript[this.activeTextId].portrait.path : this.defaultPortrait.path
       )
 
       this.portrait.positionX = hasPortrait
-        ? NPCScript[textId].portrait.offsetX
-          ? NPCScript[textId].portrait.offsetX + portraitXPos
+        ? NPCScript[this.activeTextId].portrait.offsetX
+          ? NPCScript[this.activeTextId].portrait.offsetX + portraitXPos
           : portraitXPos
         : this.defaultPortrait && this.defaultPortrait.offsetX
         ? this.defaultPortrait.offsetX + portraitXPos
         : portraitXPos
       this.portrait.positionY = hasPortrait
-        ? NPCScript[textId].portrait.offsetY
-          ? NPCScript[textId].portrait.offsetY + portraitYPos
+        ? NPCScript[this.activeTextId].portrait.offsetY
+          ? NPCScript[this.activeTextId].portrait.offsetY + portraitYPos
           : portraitYPos
         : this.defaultPortrait && this.defaultPortrait.offsetY
         ? this.defaultPortrait.offsetY + portraitYPos
         : portraitYPos
       this.portrait.width = hasPortrait
-        ? NPCScript[textId].portrait.width
-          ? NPCScript[textId].portrait.width
+        ? NPCScript[this.activeTextId].portrait.width
+          ? NPCScript[this.activeTextId].portrait.width
           : 256
         : this.defaultPortrait && this.defaultPortrait.width
         ? this.defaultPortrait.width
         : 256
       this.portrait.height = hasPortrait
-        ? NPCScript[textId].portrait.height
-          ? NPCScript[textId].portrait.height
+        ? NPCScript[this.activeTextId].portrait.height
+          ? NPCScript[this.activeTextId].portrait.height
           : 256
         : this.defaultPortrait && this.defaultPortrait.height
         ? this.defaultPortrait.height
         : 256
 
-      if (hasPortrait && NPCScript[textId].portrait.section) {
-        setSection(this.portrait, NPCScript[textId].portrait.section)
+      if (hasPortrait && NPCScript[this.activeTextId].portrait.section) {
+        setSection(this.portrait, NPCScript[this.activeTextId].portrait.section)
       } else if (!hasPortrait && this.defaultPortrait && this.defaultPortrait.section) {
         setSection(this.portrait, this.defaultPortrait.section)
       }
@@ -302,11 +310,11 @@ export class DialogWindow {
       this.portrait.visible = false
     }
 
-    let hasImage = NPCScript[textId].image ? true : false
+    let hasImage = NPCScript[this.activeTextId].image ? true : false
 
     // Set image on the right
     if (hasImage) {
-      let image = NPCScript[textId].image
+      let image = NPCScript[this.activeTextId].image
       log('setting image to ', image.path)
       this.image.source = new Texture(image.path)
 
@@ -386,7 +394,7 @@ export class DialogWindow {
       )
     }
 
-    this.layoutDialogWindow(textId)
+    this.layoutDialogWindow(this.activeTextId)
     this.isDialogOpen = true
   }
 
