@@ -5,6 +5,15 @@ import { TrackUserSlerp } from './faceUserSystem'
 import { TriggerSphereShape, NPCTriggerComponent } from '../trigger/triggerSystem'
 import { NPCDelay } from '../utils/timerComponents'
 
+/**
+ * Creates a talking and animated NPC
+ *
+ * @param position Transform argument object that can contain position, rotation and scale for NPC
+ * @param model String with path to 3D model to use for NPC
+ * @param onActivate Function to execute each time the NPC is activated. By default when clicking it or walking near, or calling the `activate()` function
+ * @param data Object of type NPCData, containing multiple configurable parameters
+ *
+ */
 export class NPC extends Entity {
   public introduced: boolean = false
   public dialog: DialogWindow

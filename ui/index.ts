@@ -6,7 +6,7 @@ import {
   SFHeavyFont,
 } from './../utils/default-ui-components'
 import { ImageData, Dialog, ButtonStyles } from '../utils/types'
-import resources, { setSection } from './resources'
+import resources, { setSection, buttonIconPos } from './resources'
 import { NPCDelay } from '../utils/timerComponents'
 
 export enum ConfirmMode {
@@ -40,6 +40,14 @@ let button2YPos4 = -20
 let button3YPos = -80
 let button4YPos = -80
 
+/**
+ * Displays a UI screen with text from an array of Dialog objects. Each entry can also include a portrait image, questions with triggered actions by each, etc.
+ *
+ * @param defaultPortrait ImageData object with soruce and dimension of default portrait image to use on the Dialog UI
+ * @param useDarkTheme If true, use the dark theme for all the UI. Can also be an alternative `Texture` object to use a different themed atlas, with identical coordinates for each element.
+ * @param sound Path to a sound file to play once for every dialog window shown.
+ *
+ */
 export class DialogWindow {
   public NPCScript: Dialog[]
   private defaultPortrait: ImageData = null
@@ -48,10 +56,6 @@ export class DialogWindow {
   public portrait: UIImage
   public image: UIImage
   public text: UIText
-  //   public buttonE: UIImage
-  //   public buttonELabel: UIText
-  //   public buttonF: UIImage
-  //   public buttonFLabel: UIText
   public button1: CustomDialogButton
   public button2: CustomDialogButton
   public button3: CustomDialogButton
@@ -874,8 +878,3 @@ export class CustomDialogButton extends Entity {
 
 let dummyQuestionDelays = new Entity()
 engine.addEntity(dummyQuestionDelays)
-
-export function buttonIconPos(textLen: number) {
-  let pos = -10 - textLen * 4
-  return pos > -65 ? pos : -65
-}

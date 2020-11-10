@@ -7,6 +7,11 @@ export function setSection(UIImage: UIImage, section: ImageSection) {
   UIImage.sourceTop = section.sourceTop ? section.sourceTop : 0
 }
 
+export function buttonIconPos(textLen: number) {
+  let pos = -10 - textLen * 4
+  return pos > -65 ? pos : -65
+}
+
 export default {
   buttons: {
     buttonE: {
