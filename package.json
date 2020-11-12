@@ -1,14 +1,14 @@
 {
-  "name": "@dcl/ui-utils",
+  "name": "@dcl/npc-utils",
   "version": "0.0.0-development",
-  "description": "A collection of UI helpers to make it easier to build a Decentraland scene using the SDK.",
+  "description": "A collection of tools for creating Non-Player-Characters (NPCs). These are capable of having conversations with the player, and play different animations.",
   "main": "index.ts",
   "scripts": {
     "semantic-release": "semantic-release"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/decentraland/decentraland-ui-utils.git"
+    "url": "git+https://github.com/decentraland/decentraland-npc-utils.git"
   },
   "prettier": {
     "printWidth": 100,
@@ -19,9 +19,9 @@
   "author": "Decentraland",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/decentraland/decentraland-ui-utils/issues"
+    "url": "https://github.com/decentraland/decentraland-npc-utils/issues"
   },
-  "homepage": "https://github.com/decentraland/decentraland-ui-utils#readme",
+  "homepage": "https://github.com/decentraland/decentraland-npc-utils#readme",
   "devDependencies": {
     "prettier": "^1.19.1",
     "semantic-release": "^16.0.1",

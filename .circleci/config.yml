@@ -1,0 +1,25 @@
+version: 2
+jobs:
+  release:
+    docker:
+      - image: circleci/node:10
+
+    working_directory: /tmp/decentraland-npc-utils
+
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: npm install
+      - run:
+          name: Semantic release
+          command: npm run semantic-release
+
+workflows:
+  version: 2
+  release:
+    jobs:
+      - release:
+          filters:
+            branches:
+              only: master
