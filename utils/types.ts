@@ -42,7 +42,7 @@ export class Dialog {
  *
  */
 export type ButtonData = {
-  goToDialog: number
+  goToDialog: number | string
   label: string
   triggeredActions?: () => void
   fontSize?: number
