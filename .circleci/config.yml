@@ -22,4 +22,4 @@ workflows:
       - release:
           filters:
             branches:
-              only: master
+              only: main
