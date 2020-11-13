@@ -41,11 +41,15 @@ export class NPC extends Entity {
     if (data && data.portrait) {
       this.dialog = new DialogWindow(
         typeof data.portrait === `string` ? { path: data.portrait } : data.portrait,
-        data.darkUI,
+        data && data.darkUI ? data.darkUI : false,
         data.dialogSound ? data.dialogSound : null
       )
     } else {
-      this.dialog = new DialogWindow(null, data.darkUI, data.dialogSound ? data.dialogSound : null)
+      this.dialog = new DialogWindow(
+        null,
+        data && data.darkUI ? data.darkUI : false,
+        data && data.dialogSound ? data.dialogSound : null
+      )
     }
     this.addComponent(new Animator())
     if (data && data.idleAnim) {

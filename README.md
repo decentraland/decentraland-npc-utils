@@ -29,9 +29,13 @@ import { NPC } from '../node_modules/@dcl/npc-utils/index'
 3. In your TypeScript file, create an `NPC` type object, passing it at least a position, a path to a 3d model, and a function to trigger when the NPC is activated:
 
 ```ts
-export let myNPC = new NPC({ position: new Vector3(10, 0.1, 10) }, 'models/CatLover.glb', () => {
-  myNPC.talk(ILoveCats, 0)
-})
+export let myNPC = new NPC(
+	{ position: new Vector3(10, 0.1, 10) }, 
+	'models/CatLover.glb', 
+	() => {
+	   myNPC.talk(ILoveCats, 0)
+	}
+)
 ```
 
 4. Write a dialog script for your character, preferably on a separate file, making it of type `Dialog[]`.
