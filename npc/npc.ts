@@ -172,7 +172,7 @@ export class NPC extends Entity {
 
     if (duration) {
       this.closeDialogTimer.addComponentOrReplace(
-        new NPCDelay(duration * 1000, () => {
+        new NPCDelay(duration, () => {
           this.dialog.closeDialogWindow()
         })
       )
@@ -191,7 +191,7 @@ export class NPC extends Entity {
       newAnim.looping = false
       if (duration) {
         this.endAnimTimer.addComponentOrReplace(
-          new NPCDelay(duration * 1000, () => {
+          new NPCDelay(duration, () => {
             newAnim.stop()
             if (this.idleAnim) {
               this.idleAnim.play()
