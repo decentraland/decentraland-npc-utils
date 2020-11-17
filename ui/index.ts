@@ -471,9 +471,14 @@ export class DialogWindow {
     currentText = this.NPCScript[this.activeTextId]
 
     // Update text
-    //this.text.value = currentText.text
+    let textY = currentText.offsetY ? currentText.offsetY + textYPos : textYPos
+
+    if (this.NPCScript[this.activeTextId].buttons.length >= 3) {
+      textY += 50
+    }
+
     this.text.fontSize = currentText.fontSize ? currentText.fontSize : textSize
-    this.text.positionY = currentText.offsetY ? currentText.offsetY + textYPos : textYPos
+    this.text.positionY = textY
 
     if (this.soundEnt.hasComponent(AudioSource)) {
       this.soundEnt.getComponent(AudioSource).playOnce()
