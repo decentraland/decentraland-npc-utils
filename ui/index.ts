@@ -473,6 +473,11 @@ export class DialogWindow {
       this.NPCScript[this.activeTextId].buttons.length >= 3
     ) {
       textY += 50
+    } else if (
+      this.NPCScript[this.activeTextId].buttons &&
+      this.NPCScript[this.activeTextId].buttons.length >= 1
+    ) {
+      textY += 24
     }
 
     this.text.fontSize = currentText.fontSize ? currentText.fontSize : textSize
