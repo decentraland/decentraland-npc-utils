@@ -3,7 +3,7 @@ import {
   SFFont,
   lightTheme,
   darkTheme,
-  SFHeavyFont,
+  SFHeavyFont
 } from './../utils/default-ui-components'
 import { ImageData, Dialog, ButtonStyles } from '../utils/types'
 import resources, { setSection, buttonIconPos } from './resources'
@@ -14,7 +14,7 @@ export enum ConfirmMode {
   Cancel = 1,
   Next = 2,
   Button3 = 3,
-  Button4 = 4,
+  Button4 = 4
 }
 
 let portraitXPos = -350
@@ -348,25 +348,20 @@ export class DialogWindow {
 
     // Global button events
     if (!this.ClickAction) {
-      this.ClickAction = Input.instance.subscribe(
-        'BUTTON_DOWN',
-        ActionButton.POINTER,
-        false,
-        (e) => {
-          if (!this.isDialogOpen || +Date.now() - this.UIOpenTime < 100) return
+      this.ClickAction = Input.instance.subscribe('BUTTON_DOWN', ActionButton.POINTER, false, e => {
+        if (!this.isDialogOpen || +Date.now() - this.UIOpenTime < 100) return
 
-          if (!DialogTypeInSystem._instance.done) {
-            DialogTypeInSystem._instance.rush()
-          } else if (!this.isQuestionPanel && !this.isFixedScreen) {
-            this.confirmText(ConfirmMode.Next)
-          }
+        if (!DialogTypeInSystem._instance.done) {
+          DialogTypeInSystem._instance.rush()
+        } else if (!this.isQuestionPanel && !this.isFixedScreen) {
+          this.confirmText(ConfirmMode.Next)
         }
-      )
+      })
       this.EButtonAction = Input.instance.subscribe(
         'BUTTON_DOWN',
         ActionButton.PRIMARY,
         false,
-        (e) => {
+        e => {
           if (
             this.isDialogOpen &&
             this.isQuestionPanel &&
@@ -381,7 +376,7 @@ export class DialogWindow {
         'BUTTON_DOWN',
         ActionButton.SECONDARY,
         false,
-        (e) => {
+        e => {
           if (
             this.isDialogOpen &&
             this.isQuestionPanel &&
@@ -473,7 +468,10 @@ export class DialogWindow {
     // Update text
     let textY = currentText.offsetY ? currentText.offsetY + textYPos : textYPos
 
-    if (this.NPCScript[this.activeTextId].buttons.length >= 3) {
+    if (
+      this.NPCScript[this.activeTextId].buttons &&
+      this.NPCScript[this.activeTextId].buttons.length >= 3
+    ) {
       textY += 50
     }
 
@@ -861,14 +859,14 @@ export class CustomDialogButton extends Entity {
     })
 
     if (style == ButtonStyles.E) {
-      Input.instance.subscribe('BUTTON_DOWN', ActionButton.PRIMARY, false, (e) => {
+      Input.instance.subscribe('BUTTON_DOWN', ActionButton.PRIMARY, false, e => {
         if (this.image.visible) {
           // && +Date.now() - UIOpenTime > 100) {
           this.onClick()
         }
       })
     } else if (style == ButtonStyles.F) {
-      Input.instance.subscribe('BUTTON_DOWN', ActionButton.SECONDARY, false, (e) => {
+      Input.instance.subscribe('BUTTON_DOWN', ActionButton.SECONDARY, false, e => {
         if (this.image.visible) {
           // && +Date.now() - UIOpenTime > 100) {
           this.onClick()
