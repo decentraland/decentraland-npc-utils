@@ -353,6 +353,7 @@ export class DialogWindow {
 
         if (!DialogTypeInSystem._instance.done) {
           DialogTypeInSystem._instance.rush()
+          return
         } else if (!this.isQuestionPanel && !this.isFixedScreen) {
           this.confirmText(ConfirmMode.Next)
         }
@@ -399,6 +400,12 @@ export class DialogWindow {
 
     // Update active text
     if (mode == ConfirmMode.Next) {
+      if (
+        DialogTypeInSystem._instance.visibleChars !== DialogTypeInSystem._instance.fullText.length
+      ) {
+        DialogTypeInSystem._instance.rush()
+        return
+      }
       if (!currentText.isQuestion) {
         if (currentText.triggeredByNext) {
           currentText.triggeredByNext()
@@ -465,6 +472,12 @@ export class DialogWindow {
     // Update active text with new active text
     currentText = this.NPCScript[this.activeTextId]
 
+    DialogTypeInSystem._instance.newText(
+      this.text,
+      currentText.text,
+      currentText.typeSpeed ? currentText.typeSpeed : null
+    )
+
     // Update text
     let textY = currentText.offsetY ? currentText.offsetY + textYPos : textYPos
 
@@ -486,12 +499,6 @@ export class DialogWindow {
     if (this.soundEnt.hasComponent(AudioSource)) {
       this.soundEnt.getComponent(AudioSource).playOnce()
     }
-
-    DialogTypeInSystem._instance.newText(
-      this.text,
-      currentText.text,
-      currentText.typeSpeed ? currentText.typeSpeed : null
-    )
 
     let hasPortrait = currentText.portrait ? true : false
 
@@ -732,10 +739,11 @@ export class DialogTypeInSystem implements ISystem {
   }
 
   newText(ui: UIText, text: string, speed?: number) {
-    this.UIText = ui
+    //this.done = true
     this.fullText = text
     this.visibleChars = 0
     this.timer = 0
+    this.UIText = ui
     this.done = false
 
     if (speed && speed <= 0) {
@@ -748,8 +756,9 @@ export class DialogTypeInSystem implements ISystem {
   }
   rush() {
     this.done = true
-    this.UIText.value = this.fullText
+    this.timer = 0
     this.visibleChars = this.fullText.length
+    this.UIText.value = this.fullText
   }
 }
 
