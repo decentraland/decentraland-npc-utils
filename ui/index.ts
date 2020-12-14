@@ -356,6 +356,7 @@ export class DialogWindow {
 
         if (!DialogTypeInSystem._instance.done) {
           DialogTypeInSystem._instance.rush()
+          return
         } else if (!this.isQuestionPanel && !this.isFixedScreen) {
           this.confirmText(ConfirmMode.Next)
         }
@@ -725,8 +726,9 @@ export class DialogTypeInSystem implements ISystem {
       let charsToAdd = Math.floor(this.timer / (1 / this.speed))
       this.timer = 0
       this.visibleChars += charsToAdd
-      if (this.visibleChars == this.fullText.length) {
+      if (this.visibleChars >= this.fullText.length) {
         this.done = true
+        this.visibleChars = this.fullText.length
       }
       this.UIText.value = this.fullText.substr(0, this.visibleChars)
     }
