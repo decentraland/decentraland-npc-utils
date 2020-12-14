@@ -54,6 +54,7 @@ export class DialogWindow {
   public container: UIContainerRect
   public panel: UIImage
   public portrait: UIImage
+  public defaultPortraitTexture: Texture
   public image: UIImage
   public text: UIText
   public button1: CustomDialogButton
@@ -99,11 +100,12 @@ export class DialogWindow {
       this.confirmText(ConfirmMode.Next)
     })
 
-    // Portrait
-    this.portrait = new UIImage(
-      this.container,
-      new Texture(defaultPortrait ? defaultPortrait.path : this.uiTheme.src)
+    this.defaultPortraitTexture = new Texture(
+      defaultPortrait ? defaultPortrait.path : this.uiTheme.src
     )
+
+    // Portrait
+    this.portrait = new UIImage(this.container, this.defaultPortraitTexture)
 
     this.portrait.sourceWidth =
       defaultPortrait && defaultPortrait.section ? defaultPortrait.section.sourceWidth : 256
@@ -266,9 +268,9 @@ export class DialogWindow {
         'setting portrait to ',
         hasPortrait ? NPCScript[this.activeTextId].portrait.path : this.defaultPortrait.path
       )
-      this.portrait.source = new Texture(
-        hasPortrait ? NPCScript[this.activeTextId].portrait.path : this.defaultPortrait.path
-      )
+      this.portrait.source = hasPortrait
+        ? new Texture(NPCScript[this.activeTextId].portrait.path)
+        : this.defaultPortraitTexture
 
       this.portrait.positionX = hasPortrait
         ? NPCScript[this.activeTextId].portrait.offsetX
@@ -341,8 +343,9 @@ export class DialogWindow {
     this.container.visible = true
 
     DialogTypeInSystem._instance.newText(
-      this.text,
+      this,
       currentText.text,
+      this.activeTextId,
       currentText.typeSpeed ? currentText.typeSpeed : null
     )
 
@@ -353,7 +356,6 @@ export class DialogWindow {
 
         if (!DialogTypeInSystem._instance.done) {
           DialogTypeInSystem._instance.rush()
-          return
         } else if (!this.isQuestionPanel && !this.isFixedScreen) {
           this.confirmText(ConfirmMode.Next)
         }
@@ -400,12 +402,6 @@ export class DialogWindow {
 
     // Update active text
     if (mode == ConfirmMode.Next) {
-      if (
-        DialogTypeInSystem._instance.visibleChars !== DialogTypeInSystem._instance.fullText.length
-      ) {
-        DialogTypeInSystem._instance.rush()
-        return
-      }
       if (!currentText.isQuestion) {
         if (currentText.triggeredByNext) {
           currentText.triggeredByNext()
@@ -473,10 +469,16 @@ export class DialogWindow {
     currentText = this.NPCScript[this.activeTextId]
 
     DialogTypeInSystem._instance.newText(
-      this.text,
+      this,
       currentText.text,
+      this.activeTextId,
       currentText.typeSpeed ? currentText.typeSpeed : null
     )
+  }
+
+  // Adds the buttons or mouse icon depending on the type of window
+  public layoutDialogWindow(textId: number): void {
+    let currentText = this.NPCScript[textId]
 
     // Update text
     let textY = currentText.offsetY ? currentText.offsetY + textYPos : textYPos
@@ -574,14 +576,6 @@ export class DialogWindow {
     } else {
       this.image.visible = false
     }
-
-    // Buttons & action icons
-    this.layoutDialogWindow(this.activeTextId)
-  }
-
-  // Adds the buttons or mouse icon depending on the type of window
-  private layoutDialogWindow(textId: number): void {
-    let currentText = this.NPCScript[textId]
 
     this.isQuestionPanel = currentText.isQuestion
 
@@ -731,21 +725,19 @@ export class DialogTypeInSystem implements ISystem {
       let charsToAdd = Math.floor(this.timer / (1 / this.speed))
       this.timer = 0
       this.visibleChars += charsToAdd
-      if (this.visibleChars >= this.fullText.length) {
+      if (this.visibleChars == this.fullText.length) {
         this.done = true
-        this.visibleChars = this.fullText.length
       }
       this.UIText.value = this.fullText.substr(0, this.visibleChars)
     }
   }
 
-  newText(ui: UIText, text: string, speed?: number) {
-    //this.done = true
+  newText(dialog: DialogWindow, text: string, textId: number, speed?: number) {
+    this.timer = 0
+    this.done = false
+    this.UIText = dialog.text
     this.fullText = text
     this.visibleChars = 0
-    this.timer = 0
-    this.UIText = ui
-    this.done = false
 
     if (speed && speed <= 0) {
       this.rush()
@@ -754,12 +746,15 @@ export class DialogTypeInSystem implements ISystem {
     } else {
       this.speed = DEFAULT_SPEED
     }
+
+    // Buttons & action icons
+    dialog.layoutDialogWindow(textId)
   }
   rush() {
     this.done = true
     this.timer = 0
-    this.visibleChars = this.fullText.length
     this.UIText.value = this.fullText
+    this.visibleChars = this.fullText.length
   }
 }
 
