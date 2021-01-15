@@ -10,11 +10,7 @@ export class TrackUserSlerp {
     }
 
     this.dummyTarget = new Entity()
-    this.dummyTarget.addComponent(
-      new Transform({
-        position: new Vector3(0, 0, 0),
-      })
-    )
+    this.dummyTarget.addComponent(new Transform())
     this.dummyTarget.getComponent(Transform).position.copyFrom(pos.position)
     this.dummyTarget.getComponent(Transform).position.y = 0
     engine.addEntity(this.dummyTarget)

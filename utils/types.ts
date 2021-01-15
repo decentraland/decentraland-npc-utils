@@ -62,7 +62,7 @@ export enum ButtonStyles {
   SQUAREBLACK = `squareblack`,
   SQUAREWHITE = `squarewhite`,
   SQUARESILVER = `squaresilver`,
-  SQUAREGOLD = `squaregold`,
+  SQUAREGOLD = `squaregold`
 }
 
 /**
@@ -80,6 +80,9 @@ export enum ButtonStyles {
  * @param coolDownDuration Change the cooldown period for activating the NPC again. The number is in seconds.
  * @param hoverText Set the UI hover feedback when pointing the cursor at the NPC. _TALK_ by default.
  * @param dialogSound Path to sound file to play once for every line of dialog read on the UI.
+ * @param walkingAnim Animation to play when walking with followPath
+ * @param walkingSpeed Default speed to use when walking with followPath
+ * @param path Array of Vector3 points representing the default path to walk over. The NPC will walk looping over these points
  *
  */
 export type NPCData = {
@@ -95,10 +98,38 @@ export type NPCData = {
   coolDownDuration?: number
   hoverText?: string
   dialogSound?: string
+  walkingAnim?: string
+  walkingSpeed?: number
+  //runningAnim?: string
+  path?: Vector3[]
 }
 
 export class Dialogs {
   dialogs: Dialog[]
+}
+
+/**
+ * Make an NPC walk following a path
+ *
+ * @param path Array of `Vector3` positions to walk over.
+ * @param speed Speed to move at while walking this path. If no `speed` or `totalDuration` is provided, it uses the NPC's `walkingSpeed`, which is _2_ by default.
+ * @param totalDuration The duration in _seconds_ that the whole path should take. The NPC will move at the constant speed required to finish in that time. This value overrides that of the _speed_.
+ * @param loop _boolean_ If true, the NPC walks in circles over the provided set of points in the path. _false_ by default, unless the NPC is initiated with a `path`, in which case it starts as _true_.
+ * @param curve _boolean_ If true, the path is traced a single smooth curve that passes over each of the indicated points. The curve is made out of straight-line segments, the path is stored with 4 times as many points as originally defined. _false_ by default.
+ * @param startingPoint Index position for what point to start from on the path. _0_ by default.
+ * @param onFinishCallback Function to call when the NPC finished walking over all the points on the path. This is only called when `loop` is _false_.
+ * @param onReachedPointCallback Function to call once every time the NPC reaches a point in the path.
+ *
+ */
+export type FollowPathData = {
+  startingPoint?: number
+  loop?: boolean
+  curve?: boolean
+  totalDuration?: number
+  speed?: number
+  path?: Vector3[]
+  onFinishCallback?: () => void
+  onReachedPointCallback?: () => void
 }
 
 /**
@@ -135,4 +166,11 @@ export class ImageData {
   height?: number
   width?: number
   section?: ImageSection
+}
+
+export enum NPCState {
+  STANDING = 'standing',
+  TALKING = 'talking',
+  FOLLOWPATH = 'followPath'
+  //FOLLOWPLAYER = 'followPlayer'
 }

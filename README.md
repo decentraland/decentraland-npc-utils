@@ -29,13 +29,9 @@ import { NPC } from '../node_modules/@dcl/npc-utils/index'
 3. In your TypeScript file, create an `NPC` type object, passing it at least a position, a path to a 3d model, and a function to trigger when the NPC is activated:
 
 ```ts
-export let myNPC = new NPC(
-	{ position: new Vector3(10, 0.1, 10) }, 
-	'models/CatLover.glb', 
-	() => {
-	   myNPC.talk(ILoveCats, 0)
-	}
-)
+export let myNPC = new NPC({ position: new Vector3(10, 0.1, 10) }, 'models/CatLover.glb', () => {
+  myNPC.talk(ILoveCats, 0)
+})
 ```
 
 4. Write a dialog script for your character, preferably on a separate file, making it of type `Dialog[]`.
@@ -46,8 +42,8 @@ import { Dialog } from '../../node_modules/@dcl/npc-utils/utils/types'
 export let ILoveCats: Dialog[] = [
   {
     text: `I really lo-ove cats`,
-    isEndOfDialog: true,
-  },
+    isEndOfDialog: true
+  }
 ]
 ```
 
@@ -91,6 +87,9 @@ To configure other properties of an NPC, add a fourth argument as an `NPCData` o
 - `reactDistance`: _(number)_ Radius in meters for the player to activate the NPC or trigger the `onWalkAway()` function when leaving the radius.
 - `continueOnWalkAway`: _(boolean)_ If true,when the player walks out of the `reactDistance` radius, the dialog window stays open and the NPC keeps turning to face the player (if applicable). It doesn't affect the triggering of the `onWalkAway()` function.
 - `onWalkAway`: (_()=> void_) Function to call every time the player walks out of the `reactDistance` radius.
+- `walkingAnim`: Name of the walking animation on the model. This animation is looped when calling the `followPath()` function.
+- `walkingSpeed`: Speed of the NPC when walking. By default _2_.
+- `path`: Default path to walk. If a value is provided for this field on NPC initialization, the NPC will walk over this path in loop from the start.
 
 The `ImageData` type that can be used on the `portrait` field is an object that may include the following:
 
@@ -121,10 +120,21 @@ export let myNPC = new NPC(
     continueOnWalkAway: true,
     onWalkAway: () => {
       log('walked away')
-    },
+    }
   }
 )
 ```
+
+## Check NPC State
+
+There are several properties you can check on an NPC to know what its current state is:
+
+- `.state`: An enum value of type `NPCState`. Supported values are `NPCState.STANDING` (default), `NPCState.TALKING`, and `NPCState.FOLLOWPATH`. `TALKING` is applied when the dialog window is opened, and set back to `STANDING` when the window is closed. `FOLLOWPATH` is applied when the NPC starts walking, and set back to `STANDING` when the NPC finishes its path or is stopped.
+- `.introduced`: Boolean, false by default. Set to true if the NPC has spoken to the player at least once in this session.
+- `.dialog.isDialogOpen()`: Returns a Boolean, false by default. True if the dialog window for this NPC is currently open.
+- `.inCooldown`: Boolean, false by default. True if the NPC was recently activated and it's now in cooldown. The NPC won't respond to being activated till `inCooldown` is false.
+
+> TIP: If you want to force an activation of the NPC in spite of the `inCooldown` value, you can force this value to true before activating.
 
 ## NPC Callable Actions
 
@@ -176,6 +186,133 @@ myNPC.activate()
 
 The `activate()` function is callable even when in cool down period, and it doesn't start a new cool down period.
 
+### Stop Walking
+
+If the NPC is currently walking, call `stopWalking()` to stop it moving and return to playing its idle animation.
+
+```ts
+myNPC.stopWalking()
+```
+
+`stopWalking()` can be called with no parameters, or it can also be called with:
+
+- `duration`: Seconds to wait before starting to walk again. If not provided, the NPC will stop walking indefinitely.
+
+> Note: If the NPC is has its dialog window open when the timer for the `duration` ends, the NPC will not return to walking.
+
+To make the NPC play a different animation from idle when paused, call `playAnimation()` after `stopWalking()`.
+
+### Follow Path
+
+Make an NPC walk following a path of `Vector3` points by calling `followPath()`. While walking, the NPC will play the `walkingAnim` if one was set when defining the NPC. The path can be taken once or on a loop.
+
+`followPath()` can be called with no parameters if a `path` was already provided in the NPC's initialization or in a previous calling of `followPath()`. If the NPC was previously in the middle of walking a path and was interrupted, calling `followPath()` again with no arguments will return the NPC to that path.
+
+```ts
+myNPC.followPath()
+```
+
+> Note: If the NPC is initialized with a `path` value, it will start out walking that path in a loop, no need to run `followPath()`.
+
+`followPath()` has a single optional parameter of type `FollowPathData`. This object may have the following optinal fields:
+
+- path: Array of `Vector3` positions to walk over.
+- speed: Speed to move at while walking this path. If no `speed` or `totalDuration` is provided, it uses the NPC's `walkingSpeed`, which is _2_ by default.
+- totalDuration: The duration in _seconds_ that the whole path should take. The NPC will move at the constant speed required to finish in that time. This value overrides that of the _speed_.
+- loop: _boolean_ If true, the NPC walks in circles over the provided set of points in the path. _false_ by default, unless the NPC is initiated with a `path`, in which case it starts as _true_.
+- curve: _boolean_ If true, the path is traced a single smooth curve that passes over each of the indicated points. The curve is made out of straight-line segments, the path is stored with 4 times as many points as originally defined. _false_ by default.
+- startingPoint: Index position for what point to start from on the path. _0_ by default.
+- onFinishCallback: Function to call when the NPC finished walking over all the points on the path. This is only called when `loop` is _false_.
+- onReachedPointCallback: Function to call once every time the NPC reaches a point in the path.
+
+```ts
+export let myNPC = new NPC({ position: new Vector3(2, 0, 2) }, 'models/CatLover.glb', () => {
+  log('NPC activated!')
+})
+myNPC.followPath({
+  path: [new Vector3(2, 0, 2), new Vector3(2, 0, 4), new Vector3(6, 0, 2)],
+  totalDuration: 4,
+  loop: false,
+  curve: true,
+  startingPoint: 0,
+  onFinishCallback: () => {
+    log('Finished!')
+  }
+})
+```
+
+#### NPC Walking Speed
+
+The following list of factors are used to determine speed in hierarchical order:
+
+- `totalDuration` parameter set when calling `followPath()` is used over the total distance travelled over the path.
+- `speed` parameter set when calling `followPath()`
+- `walkingSpeed` parameter set when initializing NPC
+- Default value _2_.
+
+#### Joining the path
+
+If the NPC's current position when calling `followPath()` doesn't match the first position in the `path` array (or the one that matches the `startingPoint` value), the current position is added to the `path` array. The NPC will start by walking from its current position to the first point provided in the path.
+
+The `path` can be a single point, and the NPC will then walk a from its current position to that point.
+
+> Note: If the speed of the NPC is determined by a `totalDuration` value, the segment that the NPC walks to join into the path is counted as part of the full path. If this segment is long, it will increase the NPC walking speed so that the full path lasts as what's indicated by the `totalDuration`.
+
+In this example the NPC is far away from the start of the path. It will first walk from _10, 0, 10_ to _2, 0, 2_ and then continue the path.
+
+```ts
+export let myNPC = new NPC({ position: new Vector3(10, 0, 10) }, 'models/CatLover.glb', () => {
+  log('NPC activated!')
+})
+myNPC.followPath({
+  path: [new Vector3(2, 0, 2), new Vector3(4, 0, 4), new Vector3(6, 0, 6)]
+})
+```
+
+#### Example Interrupting the NPC
+
+In the following example, an NPC starts roaming walking over a path, pausing on every point to call out for its lost kitten. If the player activates the NPC (by clicking or walking near it) the NPC stops, and turns to face the player and talk. When the conversation is over, the NPC returns to walking its path from where it left off.
+
+```ts
+export let myNPC = new NPC(
+  { position: new Vector3(10, 0.1, 10) },
+  'models/CatLover.glb',
+  () => {
+    myNPC.stopWalking()
+    myNPC.talk(lostCat, 0)
+  },
+  {
+    walkingAnim: 'walk',
+    walkingSpeed: 3,
+    faceUser: true
+  }
+)
+myNPC.followPath({
+  path: [new Vector3(4, 0, 30), new Vector3(6, 0, 29), new Vector3(15, 0, 25)],
+  loop: true,
+  onReachedPointCallback: () => {
+    myNPC.stopWalking(3)
+    myNPC.playAnimation(`Cocky`, true, 2.93)
+  }
+})
+
+export let lostCat: Dialog[] = [
+  {
+    text: `I lost my cat, I'm going crazy here`
+  },
+  {
+    text: `Have you seen it anywhere?`
+  },
+  {
+    text: `Ok, I'm gonna go back to looking for it`,
+    triggeredByNext: () => {
+      myNPC.followPath()
+    },
+    isEndOfDialog: true
+  }
+]
+```
+
 ### End interaction
 
 The `endInteraction()` function can be used to abruptly end interactions with the NPC.
@@ -205,15 +342,15 @@ Below is a minimal dialog.
 ```ts
 export let NPCTalk: Dialog[] = [
   {
-    text: 'Hi there',
+    text: 'Hi there'
   },
   {
-    text: 'It sure is nice talking to you',
+    text: 'It sure is nice talking to you'
   },
   {
     text: 'I must go, my planet needs me',
-    isEndOfDialog: true,
-  },
+    isEndOfDialog: true
+  }
 ]
 ```
 
@@ -296,27 +433,27 @@ All buttons can be clicked to activate them. Additionally, the first button in t
 ```ts
 export let GemsMission: Dialog[] = [
   {
-    text: `Hello stranger`,
+    text: `Hello stranger`
   },
   {
     text: `Can you help me finding my missing gems?`,
     isQuestion: true,
     buttons: [
       { label: `Yes!`, goToDialog: 2 },
-      { label: `I'm busy`, goToDialog: 4 },
-    ],
+      { label: `I'm busy`, goToDialog: 4 }
+    ]
   },
   {
-    text: `Ok, awesome, thanks!`,
+    text: `Ok, awesome, thanks!`
   },
   {
     text: `I need you to find 10 gems scattered around this scene, go find them!`,
-    isEndOfDialog: true,
+    isEndOfDialog: true
   },
   {
     text: `Ok, come back soon`,
-    isEndOfDialog: true,
-  },
+    isEndOfDialog: true
+  }
 ]
 ```
 
