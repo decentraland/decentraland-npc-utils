@@ -722,7 +722,7 @@ export class DialogTypeInSystem implements ISystem {
     if (this.done) return
 
     this.timer += dt
-    if (this.timer >= 1 / this.speed) {
+    if (this.timer >= 2 / this.speed) {
       let charsToAdd = Math.floor(this.timer / (1 / this.speed))
       this.timer = 0
       this.visibleChars += charsToAdd
