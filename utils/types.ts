@@ -28,6 +28,7 @@ export class Dialog {
   isQuestion?: boolean = false
   isFixedScreen?: boolean = false
   buttons?: ButtonData[]
+  audio?: string
 }
 
 /**

@@ -70,6 +70,7 @@ export class DialogWindow {
   public uiTheme: Texture
   private UIOpenTime: number = 0
   public soundEnt: Entity
+  public defaultSound: string = null
 
   canvas: UICanvas = canvas
   ClickAction: () => false | Subscription[]
@@ -159,13 +160,15 @@ export class DialogWindow {
     this.text.isPointerBlocker = false
 
     this.soundEnt = new Entity()
+    this.soundEnt.addComponent(new Transform())
+    engine.addEntity(this.soundEnt)
+    this.soundEnt.setParent(Attachable.AVATAR)
 
     if (sound) {
-      this.soundEnt.addComponent(new Transform())
       this.soundEnt.addComponent(new AudioSource(new AudioClip(sound)))
       this.soundEnt.getComponent(AudioSource).volume = 0.5
-      engine.addEntity(this.soundEnt)
-      this.soundEnt.setParent(Attachable.AVATAR)
+
+      this.defaultSound = sound
     }
 
     this.button1 = new CustomDialogButton(
@@ -254,7 +257,14 @@ export class DialogWindow {
 
     let currentText = NPCScript[this.activeTextId]
 
-    if (this.soundEnt.hasComponent(AudioSource)) {
+    if (NPCScript[this.activeTextId].audio) {
+      this.soundEnt.addComponentOrReplace(
+        new AudioSource(new AudioClip(NPCScript[this.activeTextId].audio))
+      )
+      this.soundEnt.getComponent(AudioSource).volume = 0.5
+      this.soundEnt.getComponent(AudioSource).playOnce()
+    } else if (this.defaultSound) {
+      this.soundEnt.addComponentOrReplace(new AudioSource(new AudioClip(this.defaultSound)))
       this.soundEnt.getComponent(AudioSource).playOnce()
     }
 
@@ -498,7 +508,14 @@ export class DialogWindow {
     this.text.fontSize = currentText.fontSize ? currentText.fontSize : textSize
     this.text.positionY = textY
 
-    if (this.soundEnt.hasComponent(AudioSource)) {
+    if (this.NPCScript[this.activeTextId].audio) {
+      this.soundEnt.addComponentOrReplace(
+        new AudioSource(new AudioClip(this.NPCScript[this.activeTextId].audio))
+      )
+      this.soundEnt.getComponent(AudioSource).volume = 0.5
+      this.soundEnt.getComponent(AudioSource).playOnce()
+    } else if (this.defaultSound) {
+      this.soundEnt.addComponentOrReplace(new AudioSource(new AudioClip(this.defaultSound)))
       this.soundEnt.getComponent(AudioSource).playOnce()
     }
 
