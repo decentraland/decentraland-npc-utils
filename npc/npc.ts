@@ -196,7 +196,7 @@ export class NPC extends Entity {
     this.state = NPCState.STANDING
   }
   handleWalkAway() {
-    if (this.state == NPCState.FOLLOWPATH || this.state == NPCState.FOLLOWPLAYER) {
+    if (this.state == NPCState.FOLLOWPATH ) { //|| this.state == NPCState.FOLLOWPLAYER
       return
     }
     if (!this.continueOnWalkAway) {
