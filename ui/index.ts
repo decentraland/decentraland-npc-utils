@@ -50,7 +50,7 @@ let button4YPos = -80
  */
 export class DialogWindow {
   public NPCScript: Dialog[]
-  private defaultPortrait: ImageData = null
+  private defaultPortrait: ImageData
   public container: UIContainerRect
   public panel: UIImage
   public portrait: UIImage
@@ -63,12 +63,12 @@ export class DialogWindow {
   public button4: CustomDialogButton
 
   public leftClickIcon: UIImage
-  public isDialogOpen: boolean
-  public isQuestionPanel: boolean
-  public isFixedScreen: boolean
-  public activeTextId: number
+  public isDialogOpen: boolean = false
+  public isQuestionPanel: boolean = false
+  public isFixedScreen: boolean = false
+  public activeTextId: number = 0
   public uiTheme: Texture
-  private UIOpenTime: number
+  private UIOpenTime: number = 0
   public soundEnt: Entity
 
   canvas: UICanvas = canvas
@@ -77,7 +77,7 @@ export class DialogWindow {
   FButtonAction: () => false | Subscription[]
 
   constructor(defaultPortrait?: ImageData, useDarkTheme?: boolean | Texture, sound?: string) {
-    this.defaultPortrait = defaultPortrait ? defaultPortrait : null
+    this.defaultPortrait = defaultPortrait ? defaultPortrait : undefined
 
     this.uiTheme =
       useDarkTheme instanceof Texture ? useDarkTheme : useDarkTheme == true ? darkTheme : lightTheme
@@ -246,8 +246,7 @@ export class DialogWindow {
 
     if (!textId) {
       this.activeTextId = 0
-    }
-    if (typeof textId === 'number') {
+    } else if (typeof textId === 'number') {
       this.activeTextId = textId
     } else {
       this.activeTextId = findDialogByName(NPCScript, textId)
@@ -264,10 +263,10 @@ export class DialogWindow {
     let hasPortrait = NPCScript[this.activeTextId].portrait ? true : false
 
     if (hasPortrait || this.defaultPortrait) {
-      log(
-        'setting portrait to ',
-        hasPortrait ? NPCScript[this.activeTextId].portrait.path : this.defaultPortrait.path
-      )
+      //   log(
+      //     'setting portrait to ',
+      //     hasPortrait ? NPCScript[this.activeTextId].portrait.path : this.defaultPortrait.path
+      //   )
       this.portrait.source = hasPortrait
         ? new Texture(NPCScript[this.activeTextId].portrait.path)
         : this.defaultPortraitTexture
