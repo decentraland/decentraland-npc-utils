@@ -164,6 +164,10 @@ export class NPC extends Entity {
       this.followPath()
     }
   }
+
+  /**
+   * Calls the NPC's activation function (set on NPC definition). If NPC has `faceUser` = true, it will rotate to face the player. It starts a cooldown counter to avoid reactivating.
+   */
   activate() {
     if (this.faceUser) {
       this.getComponent(TrackUserFlag).active = true
@@ -176,6 +180,9 @@ export class NPC extends Entity {
     )
     this.onActivate()
   }
+  /**
+   * Closes dialog UI and makes NPC stop turning to face player
+   */
   endInteraction() {
     if (this.faceUser) {
       this.getComponent(TrackUserFlag).active = false
@@ -185,6 +192,9 @@ export class NPC extends Entity {
     }
     this.state = NPCState.STANDING
   }
+  /**
+   * Ends interaction and calls the onWalkAway function
+   */
   handleWalkAway() {
     if (this.state == NPCState.FOLLOWPATH) {
       //|| this.state == NPCState.FOLLOWPLAYER
@@ -197,7 +207,13 @@ export class NPC extends Entity {
       this.onWalkAway()
     }
   }
-
+  /**
+   * Starts a conversation, using the Dialog UI
+   * @param {Dialog[]} script Instructions to follow during the conversation
+   * @param {number|string} startIndex Where to start in the script. Can refer to an index in the array or the `name` field of a Dialog entry.
+   * @param {number} duration In seconds. If set, the UI will close after the set time
+   *
+   */
   talk(script: Dialog[], startIndex?: number | string, duration?: number) {
     this.introduced = true
     this.state = NPCState.TALKING
@@ -215,6 +231,13 @@ export class NPC extends Entity {
       )
     }
   }
+  /**
+   * The NPC model plays an animation
+   * @param {string} animationName Name of the animation to play, as stored in the model
+   * @param {boolean} noLoop If true, animation plays only once. You must also provide a duration
+   * @param {number} duration In seconds. After the duration is over, the NPC will return to the default animation.
+   *
+   */
   playAnimation(animationName: string, noLoop?: boolean, duration?: number) {
     this.lastPlayedAnim.stop()
     if (this.endAnimTimer.hasComponent(NPCDelay)) {
@@ -244,6 +267,10 @@ export class NPC extends Entity {
     this.lastPlayedAnim = newAnim
   }
 
+  /**
+   * Instruct the NPC to walk following a path. If no data is provided, the NPC uses data from the last time `followPath` was called, or its definition.
+   * @param {FollowPathData} data Object with data to describe a path that an NPC can walk.
+   */
   followPath(data?: FollowPathData) {
     if (!this.hasComponent(NPCLerpData)) {
       if (!data) {
@@ -346,6 +373,11 @@ export class NPC extends Entity {
 
     this.state = NPCState.FOLLOWPATH
   }
+
+  /**
+   * Stops the NPC's walking. If a default animation exists, it will play it.
+   * @param {number} duration In seconds. If a duration is provided, the NPC will return to walking after the duration is over.
+   */
   stopWalking(duration?: number) {
     this.state = NPCState.STANDING
 

@@ -499,14 +499,8 @@ export class NPCTriggerComponent {
 
   /**
    *
-   * @param shape shape of the triggering collider area
-   * @param layer layer of the Trigger, useful to discriminate between trigger events. You can set multiple layers by using a | symbol.
-   * @param triggeredByLayer against which layers to check collisions
-   * @param onTriggerEnter callback when an entity of a valid layer enters the trigger area
-   * @param onTriggerExit callback when an entity of a valid layer leaves the trigger area
-   * @param onCameraEnter callback when the player enters the trigger area
-   * @param onCameraExit callback when the player leaves the trigger area
-   * @param enableDebug when true makes the trigger area visible for debug purposes.
+   * @param {TriggerBoxShape | TriggerSphereShape} shape shape of the triggering collider area
+   * @param {TriggerData} data Object of type TriggerData, including the following optional fields: onCameraEnter, onCameraExit, onTriggerEnter, onTriggerExit, layer, triggeredByLayer, enableDebug
    */
   constructor(shape: TriggerBoxShape | TriggerSphereShape, data?: TriggerData) {
     NPCTriggerSystem.createAndAddToEngine()

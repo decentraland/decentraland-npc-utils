@@ -13,7 +13,7 @@ import {
   TriggerData
 } from './utils/types'
 import { canvas, SFFont, SFHeavyFont, lightTheme, darkTheme } from './utils/default-ui-components'
-import { TriggerSphereShape, NPCTriggerComponent } from './trigger/triggerSystem'
+import { TriggerSphereShape, TriggerBoxShape, NPCTriggerComponent } from './trigger/triggerSystem'
 import { NPCDelay } from './utils/timerComponents'
 import { DialogWindow, DialogTypeInSystem, CustomDialogButton } from './ui/index'
 import { NPCLerpData } from './npc/move'
