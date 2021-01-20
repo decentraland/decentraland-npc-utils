@@ -7,12 +7,12 @@ export class NPCLerpData {
   origin: number = 0
   target: number = 1
   fraction: number = 0
-  totalDuration: number
+  totalDuration: number = 0
   speed: number[] = []
   loop: boolean = false
   onFinishCallback?: () => void
   onReachedPointCallback?: () => void
-  constructor(path: Vector3[], walkSpeed?: number, runSpeed?: number) {
+  constructor(path: Vector3[]) {
     this.path = path
     NPCWalkSystem.createAndAddToEngine()
   }

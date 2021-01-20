@@ -14,19 +14,19 @@
  * @param buttons An array of buttons `ButtonData` objects to use in a question entry
  *
  */
-export class Dialog {
+export type Dialog = {
   text: string
   name?: string
   fontSize?: number
   offsetX?: number
   offsetY?: number
   typeSpeed?: number
-  isEndOfDialog?: boolean = false
+  isEndOfDialog?: boolean
   triggeredByNext?: () => void
   portrait?: ImageData
   image?: ImageData
-  isQuestion?: boolean = false
-  isFixedScreen?: boolean = false
+  isQuestion?: boolean
+  isFixedScreen?: boolean
   buttons?: ButtonData[]
   audio?: string
 }
@@ -106,7 +106,7 @@ export type NPCData = {
 }
 
 export class Dialogs {
-  dialogs: Dialog[]
+  dialogs: Dialog[] = []
 }
 
 /**
@@ -160,7 +160,7 @@ export type ImageSection = {
  * @param section Use only a section of the image file, useful when arranging multiple icons into an image atlas. This field takes an `ImageSection` object, specifying `sourceWidth` and `sourceHeight`, and optionally also `sourceLeft` and `sourceTop`.
  *
  */
-export class ImageData {
+export type ImageData = {
   path: string
   offsetX?: number
   offsetY?: number

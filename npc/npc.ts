@@ -19,13 +19,13 @@ export class NPC extends Entity {
   public introduced: boolean = false
   public dialog: DialogWindow
   public onActivate: () => void
-  public onWalkAway: () => void
-  public continueOnWalkAway: boolean
-  public inCooldown: boolean
+  public onWalkAway: null | (() => void) = null
+  public continueOnWalkAway: boolean = false
+  public inCooldown: boolean = false
   public coolDownDuration: number = 5
-  public faceUser: boolean
+  public faceUser: boolean = false
   public idleAnim: AnimationState
-  public walkingAnim: AnimationState
+  public walkingAnim: null | AnimationState = null
   public walkingSpeed: number = 2
   //public runningAnim: AnimationState
   public lastPlayedAnim: AnimationState
@@ -50,13 +50,13 @@ export class NPC extends Entity {
       this.dialog = new DialogWindow(
         typeof data.portrait === `string` ? { path: data.portrait } : data.portrait,
         data && data.darkUI ? data.darkUI : false,
-        data.dialogSound ? data.dialogSound : null
+        data.dialogSound ? data.dialogSound : undefined
       )
     } else {
       this.dialog = new DialogWindow(
-        null,
+        undefined,
         data && data.darkUI ? data.darkUI : false,
-        data && data.dialogSound ? data.dialogSound : null
+        data && data.dialogSound ? data.dialogSound : undefined
       )
     }
     this.addComponent(new Animator())
@@ -196,7 +196,8 @@ export class NPC extends Entity {
     this.state = NPCState.STANDING
   }
   handleWalkAway() {
-    if (this.state == NPCState.FOLLOWPATH ) { //|| this.state == NPCState.FOLLOWPLAYER
+    if (this.state == NPCState.FOLLOWPATH) {
+      //|| this.state == NPCState.FOLLOWPLAYER
       return
     }
     if (!this.continueOnWalkAway) {

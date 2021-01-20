@@ -37,7 +37,7 @@ export class NPCTriggerSystem implements ISystem {
     let entitiesWithTriggers = this._componentGroup.entities
 
     //iterate through all entities with triggers and wrap entities that weren't wrapped yet
-    entitiesWithTriggers.forEach((entity) => {
+    entitiesWithTriggers.forEach(entity => {
       if (this.shouldWrapTriggerEntity(entity)) {
         this.wrapTriggerEntity(entity)
       }
@@ -250,7 +250,7 @@ export class NPCTriggerSystem implements ISystem {
     let box = NPCTriggerSystem.getBoxShapeValues(t1GlobalPosition, t1Shape)
     let sphere = {
       center: t2GlobalPosition.add(t2Shape.position),
-      radius: t2Shape.radius,
+      radius: t2Shape.radius
     }
 
     let dmin = 0
@@ -278,7 +278,7 @@ export class NPCTriggerSystem implements ISystem {
     return {
       center: center,
       min: center.subtract(shape.size.scale(0.5)),
-      max: center.add(shape.size.scale(0.5)),
+      max: center.add(shape.size.scale(0.5))
     }
   }
 }
@@ -508,8 +508,8 @@ export class NPCTriggerComponent {
    */
   constructor(
     shape: TriggerBoxShape | TriggerSphereShape,
-    layer: number = 0,
-    triggeredByLayer: number = 0,
+    layer: number | null = 0,
+    triggeredByLayer: number | null = 0,
     onTriggerEnter?: (entity: Entity) => void,
     onTriggerExit?: (entity: Entity) => void,
     onCameraEnter?: () => void,
