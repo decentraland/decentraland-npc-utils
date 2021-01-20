@@ -9,7 +9,8 @@ import {
   ButtonData,
   ButtonStyles,
   FollowPathData,
-  NPCState
+  NPCState,
+  TriggerData
 } from './utils/types'
 import { canvas, SFFont, SFHeavyFont, lightTheme, darkTheme } from './utils/default-ui-components'
 import { TriggerSphereShape, NPCTriggerComponent } from './trigger/triggerSystem'
@@ -40,5 +41,6 @@ export {
   DialogWindow,
   DialogTypeInSystem,
   CustomDialogButton,
-  NPCLerpData
+  NPCLerpData,
+  TriggerData
 }

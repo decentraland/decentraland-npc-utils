@@ -1,3 +1,5 @@
+import { TriggerData } from '../utils/types'
+
 export class NPCTriggerSystem implements ISystem {
   private static _instance: NPCTriggerSystem | null = null
   static get instance(): NPCTriggerSystem {
@@ -506,25 +508,16 @@ export class NPCTriggerComponent {
    * @param onCameraExit callback when the player leaves the trigger area
    * @param enableDebug when true makes the trigger area visible for debug purposes.
    */
-  constructor(
-    shape: TriggerBoxShape | TriggerSphereShape,
-    layer: number | null = 0,
-    triggeredByLayer: number | null = 0,
-    onTriggerEnter?: (entity: Entity) => void,
-    onTriggerExit?: (entity: Entity) => void,
-    onCameraEnter?: () => void,
-    onCameraExit?: () => void,
-    enableDebug: boolean = false
-  ) {
+  constructor(shape: TriggerBoxShape | TriggerSphereShape, data?: TriggerData) {
     NPCTriggerSystem.createAndAddToEngine()
     this.shape = shape
-    this.layer = layer
-    this.triggeredByLayer = triggeredByLayer
-    this.onTriggerEnter = onTriggerEnter
-    this.onTriggerExit = onTriggerExit
-    this.onCameraEnter = onCameraEnter
-    this.onCameraExit = onCameraExit
-    this._debugEnabled = enableDebug
+    this.layer = data && data.layer ? data.layer : 0
+    this.triggeredByLayer = data && data.triggeredByLayer ? data.triggeredByLayer : 0
+    this.onTriggerEnter = data && data.onTriggerEnter ? data.onTriggerEnter : undefined
+    this.onTriggerExit = data && data.onTriggerExit ? data.onTriggerExit : undefined
+    this.onCameraEnter = data && data.onCameraEnter ? data.onCameraEnter : undefined
+    this.onCameraExit = data && data.onCameraExit ? data.onCameraExit : undefined
+    this._debugEnabled = data && data.enableDebug ? data.enableDebug : false
   }
 }
 

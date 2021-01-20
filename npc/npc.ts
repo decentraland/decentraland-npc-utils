@@ -122,26 +122,23 @@ export class NPC extends Entity {
             data && data.reactDistance ? data.reactDistance : 6,
             Vector3.Zero()
           ),
-          null,
-          null,
-          null,
-          null,
-          () => {
-            if (this.inCooldown) {
-              log(this.name, ' in cooldown')
-              return
-            } else if (
-              this.dialog.isDialogOpen ||
-              (data && data.onlyExternalTrigger) ||
-              (data && data.onlyClickTrigger)
-            ) {
-              return
+          {
+            onCameraEnter: () => {
+              if (this.inCooldown) {
+                log(this.name, ' in cooldown')
+                return
+              } else if (
+                this.dialog.isDialogOpen ||
+                (data && data.onlyExternalTrigger) ||
+                (data && data.onlyClickTrigger)
+              ) {
+                return
+              }
+              this.activate()
+            },
+            onCameraExit: () => {
+              this.handleWalkAway()
             }
-
-            this.activate()
-          },
-          () => {
-            this.handleWalkAway()
           }
         )
       )

@@ -31,6 +31,16 @@ export type Dialog = {
   audio?: string
 }
 
+export type TriggerData = {
+  layer?: number
+  triggeredByLayer?: number
+  onTriggerEnter?: (entity: Entity) => void
+  onTriggerExit?: (entity: Entity) => void
+  onCameraEnter?: () => void
+  onCameraExit?: () => void
+  enableDebug?: boolean
+}
+
 /**
  * Data for Button to show on a question in a Dialog entry
  *
