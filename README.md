@@ -80,7 +80,7 @@ To configure other properties of an NPC, add a fourth argument as an `NPCData` o
 - `turnSpeed`: _(number)_ If `faceUser` is true, `turnSpeed` determines the speed at which the NPC turns to face the player. 2 by default.
 - `portrait`: _(string_ or _ImageData)_ 2D image to show on the left-hand side of the dialog window. The structure of an `ImageData` object is described in detail below.
 - `darkUI`: _(boolean)_ If true, the dialog UI uses the dark theme.
-- `dialogSound`: _(string)_ Path to sound file to play once for every line of dialog read on the UI.
+- `dialogSound`: _(string)_ Path to sound file to play once for every entry shown on the UI. If the dialog entry being shown has an `audio` field, the NPC will play the file referenced by the `audio` field instead.
 - `coolDownDuration`: _(number)_ Change the cooldown period for activating the NPC again. The number is in seconds.
 - `hoverText`: _(string)_ Set the UI hover feedback when pointing the cursor at the NPC. _TALK_ by default.
 - `onlyClickTrigger`: _(boolean)_ If true, the NPC can't be activated by walking near. Just by clicking on it or calling its `activate()` function.
@@ -399,6 +399,7 @@ Other fields:
 
 - `name`: Optionally add a name to an entry, this serves to more easily refer to an entry.
 - `buttons`: An array of buttons to use in a question entry, covered in the next section.
+- `audio`: String with the path to an audio file to play once when this dialog is shown on the UI.
 - `typeSpeed`: The text appears one character at a time, simulating typing. Players can click to skip the animation. Tune the speed of this typing (30 by default) to go slower or faster. Set to _-1_ to skip the animation.
 
 <img src="screenshots/NPC4.gif" width="500">
