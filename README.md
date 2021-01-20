@@ -77,6 +77,7 @@ To configure other properties of an NPC, add a fourth argument as an `NPCData` o
 
 - `idleAnim`: _(string)_ Name of the idle animation in the model. This animation is always looped. After playing a non-looping animation it returns to looping this one.
 - `faceUser`: _(boolean)_ Set if the NPC rotates to face the user while active.
+- `turnSpeed`: _(number)_ If `faceUser` is true, `turnSpeed` determines the speed at which the NPC turns to face the player. 2 by default.
 - `portrait`: _(string_ or _ImageData)_ 2D image to show on the left-hand side of the dialog window. The structure of an `ImageData` object is described in detail below.
 - `darkUI`: _(boolean)_ If true, the dialog UI uses the dark theme.
 - `dialogSound`: _(string)_ Path to sound file to play once for every line of dialog read on the UI.

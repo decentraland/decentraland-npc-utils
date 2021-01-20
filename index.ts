@@ -1,4 +1,4 @@
-import { TrackUserSlerp } from './npc/faceUserSystem'
+import { TrackUserFlag } from './npc/faceUserSystem'
 import { NPC } from './npc/npc'
 import {
   Dialog,
@@ -19,7 +19,7 @@ import { NPCLerpData } from './npc/move'
 
 export {
   NPC,
-  TrackUserSlerp,
+  TrackUserFlag,
   Dialog,
   NPCData,
   Dialogs,

@@ -91,6 +91,7 @@ export type NPCData = {
   reactDistance?: number
   idleAnim?: string
   faceUser?: boolean
+  turningSpeed?: number
   onlyExternalTrigger?: boolean
   onlyClickTrigger?: boolean
   onWalkAway?: () => void

@@ -1,6 +1,6 @@
 import { DialogWindow } from '../ui/index'
 import { Dialog, FollowPathData, NPCData, NPCState } from '../utils/types'
-import { TrackUserSlerp } from './faceUserSystem'
+import { TrackUserFlag } from './faceUserSystem'
 
 import { TriggerSphereShape, NPCTriggerComponent } from '../trigger/triggerSystem'
 import { NPCDelay } from '../utils/timerComponents'
@@ -75,13 +75,6 @@ export class NPC extends Entity {
       this.getComponent(Animator).addClip(this.walkingAnim)
     }
 
-    // if (data && data.runningAnim) {
-    //   this.runningAnim = new AnimationState(data.runningAnim, {
-    //     looping: true
-    //   })
-    //   this.getComponent(Animator).addClip(this.runningAnim)
-    // }
-
     this.onActivate = onActivate
 
     if (data && data.onWalkAway) {
@@ -155,7 +148,7 @@ export class NPC extends Entity {
     }
 
     if (data && data.faceUser) {
-      this.addComponent(new TrackUserSlerp(this.getComponent(Transform)))
+      this.addComponent(new TrackUserFlag(true, data.turningSpeed ? data.turningSpeed : undefined))
       this.faceUser = true
     }
 
@@ -176,7 +169,7 @@ export class NPC extends Entity {
   }
   activate() {
     if (this.faceUser) {
-      this.getComponent(TrackUserSlerp).active = true
+      this.getComponent(TrackUserFlag).active = true
     }
     this.inCooldown = true
     this.addComponentOrReplace(
@@ -188,7 +181,7 @@ export class NPC extends Entity {
   }
   endInteraction() {
     if (this.faceUser) {
-      this.getComponent(TrackUserSlerp).active = false
+      this.getComponent(TrackUserFlag).active = false
     }
     if (this.dialog.isDialogOpen) {
       this.dialog.closeDialogWindow()
@@ -264,7 +257,7 @@ export class NPC extends Entity {
     }
 
     if (this.faceUser) {
-      this.getComponent(TrackUserSlerp).active = false
+      this.getComponent(TrackUserFlag).active = false
     }
 
     let lerp = this.getComponent(NPCLerpData)
@@ -358,12 +351,6 @@ export class NPC extends Entity {
   }
   stopWalking(duration?: number) {
     this.state = NPCState.STANDING
-
-    if (this.faceUser) {
-      let dummyTransform = this.getComponent(TrackUserSlerp).dummyTarget.getComponent(Transform)
-      dummyTransform.position.copyFrom(this.getComponent(Transform).position)
-      dummyTransform.position.y = 0
-    }
 
     if (this.walkingAnim) {
       this.walkingAnim.stop()
