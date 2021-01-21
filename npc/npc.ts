@@ -7,12 +7,12 @@ import { NPCDelay } from '../utils/timerComponents'
 import { NPCLerpData, walkingNPCGroup } from './move'
 
 /**
- * Creates a talking and animated NPC
+ * Creates a talking, walking and animated NPC
  *
- * @param position Transform argument object that can contain position, rotation and scale for NPC
- * @param model String with path to 3D model to use for NPC
- * @param onActivate Function to execute each time the NPC is activated. By default when clicking it or walking near, or calling the `activate()` function
- * @param data Object of type NPCData, containing multiple configurable parameters
+ * @param {TranformConstructorArgs} position Transform argument object that can contain position, rotation and scale for NPC
+ * @param {string} model String with path to 3D model to use for NPC
+ * @param {() => void} onActivate Function to execute each time the NPC is activated. By default when clicking it or walking near, or calling the `activate()` function
+ * @param {NPCData} data Object of type NPCData, containing multiple configurable parameters
  *
  */
 export class NPC extends Entity {
@@ -27,12 +27,20 @@ export class NPC extends Entity {
   public idleAnim: AnimationState
   public walkingAnim: null | AnimationState = null
   public walkingSpeed: number = 2
-  //public runningAnim: AnimationState
   public lastPlayedAnim: AnimationState
   public endAnimTimer: Entity
   public closeDialogTimer: Entity
   public pauseWalkingTimer: Entity
   public state: NPCState
+  /**
+   * Creates a talking, walking and animated NPC
+   *
+   * @param {TranformConstructorArgs} position Transform argument object that can contain position, rotation and scale for NPC
+   * @param {string} model String with path to 3D model to use for NPC
+   * @param {() => void} onActivate Function to execute each time the NPC is activated. By default when clicking it or walking near, or calling the `activate()` function
+   * @param {NPCData} data Object of type NPCData, containing multiple configurable parameters
+   *
+   */
   constructor(
     position: TranformConstructorArgs,
     model: string,

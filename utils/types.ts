@@ -15,7 +15,6 @@
  * @property {ButtonData[]} buttons An array of buttons `ButtonData` objects to use in a question entry
  *
  */
-/** @type {Dialog} */
 export type Dialog = {
   text: string
   name?: string
@@ -44,8 +43,6 @@ export type Dialog = {
  * @property {() => void} onCameraExit callback when the player leaves the trigger area
  * @property {boolean} enableDebug when true makes the trigger area visible for debug purposes.
  */
-
-/** @type {TriggerData} */
 export type TriggerData = {
   layer?: number
   triggeredByLayer?: number
@@ -68,7 +65,6 @@ export type TriggerData = {
  * @property {number} offsetY Offset of the text on the Y axis, relative to its normal position.
  *
  */
-/** @type {ButtonData} */
 export type ButtonData = {
   goToDialog: number | string
   label: string
@@ -96,7 +92,7 @@ export enum ButtonStyles {
 /**
  * An NPC capable of having conversations with the player, and play different animations.
  *
- * @typedef {Object} NPCData - Object with data to instance a new NPC
+ * @typedef {Object} NPCData Object with data to instance a new NPC
  * @property {string|ImageData} portrait 2D image to show on the left-hand side of the dialog window. The structure of an `ImageData` object is described in detail below.
  * @property {number} reactDistance Radius in meters for the player to activate the NPC or trigger the `onWalkAway()` function when leaving the radius.
  * @property {string} idleAnim Name of the idle animation in the model. This animation is always looped. After playing a non-looping animation it returns to looping this one.
@@ -130,7 +126,6 @@ export type NPCData = {
   dialogSound?: string
   walkingAnim?: string
   walkingSpeed?: number
-  //runningAnim?: string
   path?: Vector3[]
 }
 
