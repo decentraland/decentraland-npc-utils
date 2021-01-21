@@ -3,7 +3,6 @@ import { NPC } from './npc/npc'
 import {
   Dialog,
   NPCData,
-  Dialogs,
   ImageSection,
   ImageData,
   ButtonData,
@@ -23,7 +22,6 @@ export {
   TrackUserFlag,
   Dialog,
   NPCData,
-  Dialogs,
   ImageSection,
   ImageData,
   ButtonData,

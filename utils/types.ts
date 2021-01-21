@@ -13,6 +13,7 @@
  * @property {boolean} isQuestion If true, allows to use buttons to trigger different actions
  * @property {boolean} isFixedScreen If true, has no buttons or "next page" functionality
  * @property {ButtonData[]} buttons An array of buttons `ButtonData` objects to use in a question entry
+ * @property {string} audio Path to sound file to play when the dialog is shown in the UI
  *
  */
 export type Dialog = {
@@ -127,10 +128,6 @@ export type NPCData = {
   walkingAnim?: string
   walkingSpeed?: number
   path?: Vector3[]
-}
-
-export class Dialogs {
-  dialogs: Dialog[] = []
 }
 
 /**
