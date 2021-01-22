@@ -1,6 +1,6 @@
 {
  "compilerOptions": {
-	"outFile": "./dist/index-lib.js",
+	"outFile": "./dist/index.js",
 	"allowJs": true
   },
   "include": ["src/**/*.ts"],
