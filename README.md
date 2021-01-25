@@ -63,7 +63,7 @@ export let myNPC = new NPC({ position: new Vector3(10, 0.1, 10) }, 'models/CatLo
 
 With this default configuration, the NPC behaves in the following way:
 
-- The `onActivate()` function is called when the NPC is clicked, and when the player walks near at a distance of 6 meters.
+- The `onActivate()` function is called when pressing E on the NPC, and when the player walks near at a distance of 6 meters.
 - Once activated, there's a cooldown period of 5 seconds, that prevents the NPC to be activated again.
 - After walking away from the NPC, if its dialog window was open it will be closed, and if the NPC was rotating to follow the player it will stop.
 - If the NPC already has an open dialog window, clicking on the NPC won't do anything, to prevent accidentally clicking on it while flipping through the conversation.
@@ -84,7 +84,8 @@ To configure other properties of an NPC, add a fourth argument as an `NPCData` o
 - `coolDownDuration`: _(number)_ Change the cooldown period for activating the NPC again. The number is in seconds.
 - `hoverText`: _(string)_ Set the UI hover feedback when pointing the cursor at the NPC. _TALK_ by default.
 - `onlyClickTrigger`: _(boolean)_ If true, the NPC can't be activated by walking near. Just by clicking on it or calling its `activate()` function.
-- `onlyExternalTrigger`: _(boolean)_ If true, the NPC can't be activated by clicking or walking near. Just by calling its `activate()` function.
+- `onlyETrigger`: _(boolean)_ If true, the NPC can't be activated by walking near. Just by pressing the E key on it or calling its `activate()` function.
+- `onlyExternalTrigger`: _(boolean)_ If true, the NPC can't be activated by clicking, pressing E, or walking near. Just by calling its `activate()` function.
 - `reactDistance`: _(number)_ Radius in meters for the player to activate the NPC or trigger the `onWalkAway()` function when leaving the radius.
 - `continueOnWalkAway`: _(boolean)_ If true,when the player walks out of the `reactDistance` radius, the dialog window stays open and the NPC keeps turning to face the player (if applicable). It doesn't affect the triggering of the `onWalkAway()` function.
 - `onWalkAway`: (_()=> void_) Function to call every time the player walks out of the `reactDistance` radius.
@@ -179,7 +180,7 @@ myNPC.playAnimation(`Head_Yes`, true, 2.63)
 
 ### Activate
 
-The `activate()` function can be used to trigger the `onActivate()` function, as an alternative to clicking or walking near.
+The `activate()` function can be used to trigger the `onActivate()` function, as an alternative to pressing E or walking near.
 
 ```ts
 myNPC.activate()
@@ -272,7 +273,7 @@ myNPC.followPath({
 
 #### Example Interrupting the NPC
 
-In the following example, an NPC starts roaming walking over a path, pausing on every point to call out for its lost kitten. If the player activates the NPC (by clicking or walking near it) the NPC stops, and turns to face the player and talk. When the conversation is over, the NPC returns to walking its path from where it left off.
+In the following example, an NPC starts roaming walking over a path, pausing on every point to call out for its lost kitten. If the player activates the NPC (by pressing E on it or walking near it) the NPC stops, and turns to face the player and talk. When the conversation is over, the NPC returns to walking its path from where it left off.
 
 ```ts
 export let myNPC = new NPC(

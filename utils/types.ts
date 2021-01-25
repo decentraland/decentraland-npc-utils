@@ -100,6 +100,7 @@ export enum ButtonStyles {
  * @property {boolean} faceUser Set if the NPC rotates to face the user while active.
  * @property {boolean} onlyExternalTrigger If true, the NPC can't be activated by clicking or walking near. Just by calling its `activate()` function.
  * @property {boolean} onlyClickTrigger If true, the NPC can't be activated by walking near. Just by clicking on it or calling its `activate()` function.
+ * @property {boolean} onlyETrigger If true, the NPC can't be activated by walking near. Just by pressing E on it or calling its `activate()` function.
  * @property {() => void} onWalkAway Function to call every time the player walks out of the `reactDistance` radius.
  * @property {boolean} continueOnWalkAway f true,when the player walks out of the `reactDistance` radius, the dialog window stays open and the NPC keeps turning to face the player (if applicable). It doesn't affect the triggering of the `onWalkAway()` function.
  * @property {boolean} darkUI If true, the dialog UI uses the dark theme.
@@ -119,6 +120,7 @@ export type NPCData = {
   turningSpeed?: number
   onlyExternalTrigger?: boolean
   onlyClickTrigger?: boolean
+  onlyETrigger?: boolean
   onWalkAway?: () => void
   continueOnWalkAway?: boolean
   darkUI?: boolean
