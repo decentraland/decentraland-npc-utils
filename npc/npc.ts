@@ -102,6 +102,8 @@ export class NPC extends Entity {
     this.pauseWalkingTimer = new Entity()
     engine.addEntity(this.pauseWalkingTimer)
 
+    let activateButton = data && data.onlyClickTrigger ? ActionButton.POINTER : ActionButton.PRIMARY
+
     // Reaction when clicked
     this.addComponent(
       new OnPointerDown(
@@ -111,7 +113,7 @@ export class NPC extends Entity {
           this.activate()
         },
         {
-          button: ActionButton.POINTER,
+          button: activateButton,
           hoverText: data && data.hoverText ? data.hoverText : 'Talk',
           showFeedback: data && data.onlyExternalTrigger ? false : true
         }
