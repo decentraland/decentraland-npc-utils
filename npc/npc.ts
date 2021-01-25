@@ -125,7 +125,10 @@ export class NPC extends Entity {
     }
 
     // trigger when player walks near
-    if (!data || (data && !data.onlyExternalTrigger) || (data && !data.onlyClickTrigger)) {
+    if (
+      !data ||
+      (data && !data.onlyExternalTrigger && !data.onlyClickTrigger && !data.onlyETrigger)
+    ) {
       this.addComponent(
         new NPCTriggerComponent(
           new TriggerSphereShape(
