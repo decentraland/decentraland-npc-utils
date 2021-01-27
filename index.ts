@@ -1,5 +1,5 @@
-import { TrackUserFlag } from './npc/faceUserSystem'
-import { NPC } from './npc/npc'
+import { TrackUserFlag } from './src/npc/faceUserSystem'
+import { NPC } from './src/npc/npc'
 import {
   Dialog,
   NPCData,
@@ -10,12 +10,22 @@ import {
   FollowPathData,
   NPCState,
   TriggerData
-} from './utils/types'
-import { canvas, SFFont, SFHeavyFont, lightTheme, darkTheme } from './utils/default-ui-components'
-import { TriggerSphereShape, TriggerBoxShape, NPCTriggerComponent } from './trigger/triggerSystem'
-import { NPCDelay } from './utils/timerComponents'
-import { DialogWindow, DialogTypeInSystem, CustomDialogButton } from './ui/index'
-import { NPCLerpData } from './npc/move'
+} from './src/utils/types'
+import {
+  canvas,
+  SFFont,
+  SFHeavyFont,
+  lightTheme,
+  darkTheme
+} from './src/utils/default-ui-components'
+import {
+  TriggerSphereShape,
+  TriggerBoxShape,
+  NPCTriggerComponent
+} from './src/trigger/triggerSystem'
+import { NPCDelay } from './src/utils/timerComponents'
+import { DialogWindow, DialogTypeInSystem, CustomDialogButton } from './src/ui/index'
+import { NPCLerpData } from './src/npc/move'
 
 export {
   NPC,
@@ -33,6 +43,7 @@ export {
   SFHeavyFont,
   lightTheme,
   darkTheme,
+  TriggerBoxShape,
   TriggerSphereShape,
   NPCTriggerComponent,
   NPCDelay,

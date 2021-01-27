@@ -1,8 +1,30 @@
 {
  "compilerOptions": {
-	"outFile": "./dist/index.js",
-	"allowJs": true
+	"module": "ESNext",
+    "target": "es2017",
+	"outDir": "./dist",
+	"diagnostics": true,
+	"emitDecoratorMetadata": true,
+	"experimentalDecorators": true,
+	"inlineSourceMap": false,
+    "inlineSources": false,
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+	"moduleResolution": "node",
+	"stripInternal": true,
+    "pretty": true,
+    "forceConsistentCasingInFileNames": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
+	"types": [],
+	"esModuleInterop": true,
+	"allowSyntheticDefaultImports": true,
+	"noEmit": true
   },
-  "include": ["src/**/*.ts"],
-  "extends": "./node_modules/decentraland-ecs/types/tsconfig.json"
+  "include": ["./src/*", "index.ts"],
+  "exclude": [
+    "node_modules/**/*",
+    "static/**/*"
+  ]
 }
