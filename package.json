@@ -2,14 +2,15 @@
   "name": "@dcl/npc-utils",
   "version": "0.0.0-development",
   "description": "A collection of tools for creating Non-Player-Characters (NPCs). These are capable of having conversations with the player, and play different animations.",
-  "main": "./dist/npc-utils.js",
-  "typings": "./dist/npc-utils.d.ts",
+  "main": "./dist/index.js",
+  "typings": "./dist/index.d.ts",
   "decentralandLibrary": {},
   "files": [
     "dist"
   ],
   "scripts": {
-    "semantic-release": "semantic-release"
+    "semantic-release": "semantic-release",
+    "build": "rollup -c --environment BUILD:production"
   },
   "repository": {
     "type": "git",
@@ -29,14 +30,16 @@
   "homepage": "https://github.com/decentraland/decentraland-npc-utils#readme",
   "devDependencies": {
     "prettier": "^1.19.1",
+    "rollup": "^2.38.4",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-typescript2": "^0.29.0",
     "semantic-release": "^16.0.1",
     "typescript": "^3.9.3"
   },
   "dependencies": {
-    "@rollup/plugin-commonjs": "^17.0.0",
-    "@rollup/plugin-node-resolve": "^11.1.0",
-    "decentraland-ecs": "latest",
-    "rollup-plugin-terser": "^7.0.2"
+    "decentraland-ecs": "latest"
   },
   "publishConfig": {
     "access": "public"
