@@ -1,5 +1,30 @@
 {
-  "include": ["."],
-  "exclude": ["node_modules"],
-  "extends": "./node_modules/decentraland-ecs/types/tsconfig.json"
+ "compilerOptions": {
+	"module": "ESNext",
+    "target": "es2017",
+	"outDir": "./dist",
+	"diagnostics": true,
+	"emitDecoratorMetadata": true,
+	"experimentalDecorators": true,
+	"inlineSourceMap": false,
+    "inlineSources": false,
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+	"moduleResolution": "node",
+	"stripInternal": true,
+    "pretty": true,
+    "forceConsistentCasingInFileNames": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
+	"types": [],
+	"esModuleInterop": true,
+	"allowSyntheticDefaultImports": true,
+	"noEmit": true
+  },
+  "include": ["./src/*", "index.ts"],
+  "exclude": [
+    "node_modules/**/*",
+    "static/**/*"
+  ]
 }

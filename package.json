@@ -2,7 +2,12 @@
   "name": "@dcl/npc-utils",
   "version": "0.0.0-development",
   "description": "A collection of tools for creating Non-Player-Characters (NPCs). These are capable of having conversations with the player, and play different animations.",
-  "main": "index.ts",
+  "main": "./dist/npc-utils.js",
+  "typings": "./dist/npc-utils.d.ts",
+  "decentralandLibrary": {},
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "semantic-release": "semantic-release"
   },
@@ -28,12 +33,17 @@
     "typescript": "^3.9.3"
   },
   "dependencies": {
-    "decentraland-ecs": "latest"
+    "@rollup/plugin-commonjs": "^17.0.0",
+    "@rollup/plugin-node-resolve": "^11.1.0",
+    "decentraland-ecs": "latest",
+    "rollup-plugin-terser": "^7.0.2"
   },
   "publishConfig": {
     "access": "public"
   },
   "release": {
-    "branches": ["main"]
+    "branches": [
+      "main"
+    ]
   }
 }
