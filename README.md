@@ -515,6 +515,50 @@ export let GemsMission: Dialog[] = [
 ]
 ```
 
+## No-NPC Dialogs
+
+You can open a Dialog window that isn't associated with any `NPC` object in the scene. The `DialogWindow` object has all the same functionality as calling the `talk()` function on an NPC, but may be more practical in scenarios where a character isn't physically there, or where the conversation isn't with a particular character.
+
+### The Dialog window
+
+To create a new dialog window, create a new `DialogWindow` object. This will instantiate the window but keep it hidden until you open it.
+
+```ts
+let dialogWindow = new ui.DialogWindow()
+```
+
+<img src="screenshots/NPC1.png" width="500">
+
+When instantiating a new DialogWindow, you can pass the following parameters:
+
+- `defaultPortrait`: Sets a default portrait image to use on the left of all dialogs that don't specify an image. If a dialog has no portrait and no default is provided, no image is shown on the left. This field expects a `Portrait` object, that may include the following fields: - `path`: Path to the image file - `xOffset`: Offset on X, relative to the normal position of the portrait. - `yOffset`: Offset on Y, relative to the normal position of the portrait. - `section`: Use only a section of the image file, useful when arranging multiple icons into an image atlas. This field takes an `ImageSection` object, specifying `sourceWidth` and `sourceHeight`, and optionally also `sourceLeft` and `sourceTop`.
+- `useDarkTheme`: Switch the style of the window to the dark theme.
+- `sound`: Path to a sound file that will be played once for every dialog entry shown, as long as the dialog entry doesn't have its own `audio` property.
+
+Once a `DialogWindow` object is instanced, you can open a dialog window with the `openDialogWindow()` function.
+
+```ts
+dialogWindow.openDialogWindow(NPCTalk, 0)
+```
+
+When calling this function, you must specify:
+
+- `NPCScript`: A JSON object composed of an array of `Dialog` objects, that includes all the dialog tree.
+
+A second optional parameter is also available:
+
+- `textId`: The index or `name` property of the entry to show first from the script. The first entry is 0.
+
+> TIP: It's always better to refer to an entry by name, since the array index might shift if you add more entries and it can get hard to keep track of these references.
+
+Close a dialog window at any time by calling the `closeDialogWindow()` function.
+
+```ts
+dialogWindow.closeDialogWindow()
+```
+
+For details on how to construct the dialog tree, see the sections above. The required `NPCScript` by the `DialogWindow` has exactly the same characteristics as the one used on the `NPC` object when calling the `talk()` function.
+
 ---
 
 ## CI/CD
