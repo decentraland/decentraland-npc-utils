@@ -27,7 +27,7 @@ export class NPCDelay implements ITimerComponent {
     this.elapsedTime = 0
     this.targetTime = seconds
     this.onTimeReachedCallback = onTimeReachedCallback
-    this.onTargetTimeReached = (entity) => {
+    this.onTargetTimeReached = entity => {
       this.onTimeReachedCallback()
       entity.removeComponent(NPCDelay)
     }

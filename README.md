@@ -14,19 +14,21 @@ The dialog messages can also require that the player chooses options, and any ac
 
 To use NPCs in your scene:
 
-1. Install the library as an npm package. Run this command in your scene's project folder:
+1. Install the library as an npm bundle. Run this command in your scene's project folder:
 
 ```
-npm i @dcl/npc-utils
+npm i @dcl/npc-utils -B
 ```
 
-2. Import the library into the scene's script. Add this line at the start of your `game.ts` file, or any other TypeScript files that require it:
+2. Run `dcl start` or `dcl build` so the dependencies are correctly installed.
+
+3. Import the library into the scene's script. Add this line at the start of your `game.ts` file, or any other TypeScript files that require it:
 
 ```ts
-import { NPC } from '../node_modules/@dcl/npc-utils/index'
+import { NPC } from 'npc-utils'
 ```
 
-3. In your TypeScript file, create an `NPC` type object, passing it at least a position, a path to a 3d model, and a function to trigger when the NPC is activated:
+4. In your TypeScript file, create an `NPC` type object, passing it at least a position, a path to a 3d model, and a function to trigger when the NPC is activated:
 
 ```ts
 export let myNPC = new NPC({ position: new Vector3(10, 0.1, 10) }, 'models/CatLover.glb', () => {
@@ -34,10 +36,10 @@ export let myNPC = new NPC({ position: new Vector3(10, 0.1, 10) }, 'models/CatLo
 })
 ```
 
-4. Write a dialog script for your character, preferably on a separate file, making it of type `Dialog[]`.
+5. Write a dialog script for your character, preferably on a separate file, making it of type `Dialog[]`.
 
 ```ts
-import { Dialog } from '../../node_modules/@dcl/npc-utils/utils/types'
+import { Dialog } from 'npc-utils'
 
 export let ILoveCats: Dialog[] = [
   {

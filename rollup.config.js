@@ -1,26 +1,44 @@
 
-import commonjs from '@rollup/plugin-commonjs'
-import resolve from '@rollup/plugin-node-resolve'
+import resolve from 'rollup-plugin-node-resolve'
+import commonjs from 'rollup-plugin-commonjs'
 import { terser } from 'rollup-plugin-terser'
 import typescript from 'rollup-plugin-typescript2'
 
-const config = {
-	input: 'index.ts',
-	output: {
-	  file: './dist/npc-utils.js',
-	  format: 'umd',
-	  name: 'npc-utils',
-	  amd: {
-		id: 'npc-utils'
-	  }
-	},
-  
-	plugins: [
-		typescript({
-			verbosity: 2,
-			clean: true,
-		  }),
-		commonjs(), resolve(), terser()]
-  }
-  
-  export default config
+const PROD = !!process.env.CI
+
+console.log(`production: ${PROD}`)
+
+const plugins = [
+  typescript({
+    verbosity: 2,
+    clean: true
+  }),
+  resolve({
+    browser: true,
+    preferBuiltins: false
+  }),
+  commonjs({
+    ignoreGlobal: true,
+    include: [/node_modules/],
+    namedExports: {}
+  }),
+
+  PROD && terser({})
+]
+
+export default {
+  input: './src/index.ts',
+  context: 'globalThis',
+  plugins,
+  output: [
+    {
+      file: './dist/index.js',
+      format: 'umd',
+      name: 'npc-utils',
+      sourcemap: true,
+      amd: {
+        id: 'npc-utils'
+      }
+    }
+  ]
+}
