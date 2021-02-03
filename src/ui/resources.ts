@@ -1,10 +1,10 @@
 import { ImageSection } from '../utils/types'
 
-export function setSection(UIImage: UIImage, section: ImageSection) {
-  UIImage.sourceWidth = section.sourceWidth
-  UIImage.sourceHeight = section.sourceHeight
-  UIImage.sourceLeft = section.sourceLeft ? section.sourceLeft : 0
-  UIImage.sourceTop = section.sourceTop ? section.sourceTop : 0
+export function setSection(image: UIImage, section: ImageSection) {
+  image.sourceWidth = section.sourceWidth
+  image.sourceHeight = section.sourceHeight
+  image.sourceLeft = section.sourceLeft ? section.sourceLeft : 0
+  image.sourceTop = section.sourceTop ? section.sourceTop : 0
 }
 
 export function buttonIconPos(textLen: number) {

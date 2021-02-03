@@ -12,6 +12,9 @@ jobs:
           name: Install dependencies
           command: npm install
       - run:
+          name: Build lib
+          command: npm run build
+      - run:
           name: Semantic release
           command: npm run semantic-release
 
