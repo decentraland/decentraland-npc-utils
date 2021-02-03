@@ -17,7 +17,7 @@ To use NPCs in your scene:
 1. Install the library as an npm bundle. Run this command in your scene's project folder:
 
 ```
-npm i @dcl/npc-utils -B
+npm i @dcl/npc-scene-utils -B
 ```
 
 2. Run `dcl start` or `dcl build` so the dependencies are correctly installed.
