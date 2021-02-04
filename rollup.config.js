@@ -34,10 +34,10 @@ export default {
     {
       file: './dist/index.js',
       format: 'umd',
-      name: 'npc-utils',
+      name: '@dcl/npc-scene-utils',
       sourcemap: true,
       amd: {
-        id: 'npc-utils'
+        id: '@dcl/npc-scene-utils'
       }
     }
   ]
