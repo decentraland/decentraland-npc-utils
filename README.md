@@ -25,7 +25,7 @@ npm i @dcl/npc-scene-utils -B
 3. Import the library into the scene's script. Add this line at the start of your `game.ts` file, or any other TypeScript files that require it:
 
 ```ts
-import { NPC } from 'npc-utils'
+import { NPC } from '@dcl/npc-scene-utils'
 ```
 
 4. In your TypeScript file, create an `NPC` type object, passing it at least a position, a path to a 3d model, and a function to trigger when the NPC is activated:
@@ -39,7 +39,7 @@ export let myNPC = new NPC({ position: new Vector3(10, 0.1, 10) }, 'models/CatLo
 5. Write a dialog script for your character, preferably on a separate file, making it of type `Dialog[]`.
 
 ```ts
-import { Dialog } from 'npc-utils'
+import { Dialog } from '@dcl/npc-scene-utils'
 
 export let ILoveCats: Dialog[] = [
   {
