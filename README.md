@@ -365,18 +365,20 @@ The script must adhere to the following schema:
 ```ts
 class Dialog {
   text: string
-  name? string
+  name?: string
   fontSize?: number
   offsetX?: number
   offsetY?: number
-  isEndOfDialog?: boolean = false
+  typeSpeed?: number
+  isEndOfDialog?: boolean
   triggeredByNext?: () => void
   portrait?: ImageData
   image?: ImageData
-  typeSpeed?: number
-  isQuestion?: boolean = false
-  isFixedScreen?: boolean = false
+  isQuestion?: boolean
+  isFixedScreen?: boolean
   buttons?: ButtonData[]
+  audio?: string
+  skipable?: boolean
 }
 ```
 
@@ -404,6 +406,7 @@ Other fields:
 - `buttons`: An array of buttons to use in a question entry, covered in the next section.
 - `audio`: String with the path to an audio file to play once when this dialog is shown on the UI.
 - `typeSpeed`: The text appears one character at a time, simulating typing. Players can click to skip the animation. Tune the speed of this typing (30 by default) to go slower or faster. Set to _-1_ to skip the animation.
+- `skipable`: If true, a "Skip" button appears in the corner to let players jump to the next non-skipable dialog, or close the dialog. Question dialogs can't be skiped.
 
 <img src="screenshots/NPC4.gif" width="500">
 
@@ -514,6 +517,16 @@ export let GemsMission: Dialog[] = [
   }
 ]
 ```
+
+#### Skipping Dialogs
+
+Each dialog has an optional `skip` property. If true, a button appears in the bottom-left corner of the dialog window. Players can click this button or press F to skip all the following dialogs.
+
+When skipping, players will jump forward in the conversation till
+
+- They reach a dialog that doesn't have the `skip` property.
+- They reach a dialog with `isQuestion=true`.
+- They reach a dialog that has the `skip` property and `isEndOfDialog`, in which case the dialog window is closed.
 
 ## No-NPC Dialogs
 

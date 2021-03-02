@@ -31,6 +31,7 @@ export type Dialog = {
   isFixedScreen?: boolean
   buttons?: ButtonData[]
   audio?: string
+  skipable?: boolean
 }
 
 /**

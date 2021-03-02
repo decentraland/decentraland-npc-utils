@@ -40,6 +40,9 @@ let button2YPos4 = -20
 let button3YPos = -80
 let button4YPos = -80
 
+let skipButtonXPos = -300
+let skipButtonYPos = -100
+
 /**
  * Displays a UI screen with text from an array of Dialog objects. Each entry can also include a portrait image, questions with triggered actions by each, etc.
  *
@@ -61,6 +64,7 @@ export class DialogWindow {
   public button2: CustomDialogButton
   public button3: CustomDialogButton
   public button4: CustomDialogButton
+  public skipButton: CustomDialogButton
 
   public leftClickIcon: UIImage
   public isDialogOpen: boolean = false
@@ -81,7 +85,13 @@ export class DialogWindow {
     this.defaultPortrait = defaultPortrait ? defaultPortrait : null
 
     this.uiTheme =
-      useDarkTheme instanceof Texture ? useDarkTheme : useDarkTheme == true ? darkTheme : lightTheme
+      useDarkTheme === true ? darkTheme : useDarkTheme === false ? lightTheme : useDarkTheme
+
+    //   useDarkTheme instanceof Texture
+    //     ? useDarkTheme
+    //     : useDarkTheme == true
+    //     ? darkTheme
+    //     : lightTheme
     //this.uiTheme =useDarkTheme == true ? darkTheme : lightTheme
 
     // Container
@@ -226,6 +236,27 @@ export class DialogWindow {
       ButtonStyles.DARK
     )
     this.button4.hide()
+
+    this.skipButton = new CustomDialogButton(
+      this.container,
+      this.uiTheme,
+      '...Skip',
+      skipButtonXPos,
+      skipButtonYPos,
+      () => {
+        this.skipDialogs()
+      },
+      false,
+      ButtonStyles.F
+    )
+    this.skipButton.image.width = 80
+    this.skipButton.image.height = 30
+    this.skipButton.label.fontSize = 12
+    this.skipButton.label.positionX = 5
+    this.skipButton.icon.height = 20
+    this.skipButton.icon.width = 20
+    this.skipButton.icon.positionX = -20
+    this.skipButton.hide()
 
     // Left Click Icon
     this.leftClickIcon = new UIImage(this.container, this.uiTheme)
@@ -393,6 +424,12 @@ export class DialogWindow {
             +Date.now() - this.UIOpenTime > 100
           ) {
             this.confirmText(ConfirmMode.Cancel)
+          } else if (
+            this.isDialogOpen &&
+            currentText.skipable &&
+            +Date.now() - this.UIOpenTime > 100
+          ) {
+            this.skipDialogs()
           }
         }
       )
@@ -586,6 +623,7 @@ export class DialogWindow {
     this.leftClickIcon.visible = false
 
     if (currentText.isQuestion) {
+      this.skipButton.hide()
       // Button E
       if (currentText.buttons && currentText.buttons.length >= 1) {
         this.button1.update(
@@ -670,6 +708,12 @@ export class DialogWindow {
       )
     } else if (!this.isFixedScreen) {
       this.leftClickIcon.visible = true
+
+      if (currentText.skipable) {
+        this.skipButton.show()
+      } else {
+        this.skipButton.hide()
+      }
     }
   }
 
@@ -687,9 +731,31 @@ export class DialogWindow {
       this.button2.hide()
       this.button3.hide()
       this.button4.hide()
+      this.skipButton.hide()
       this.leftClickIcon.visible = false
       this.container.visible = false
     }
+  }
+
+  public skipDialogs() {
+    if (!this.isDialogOpen || +Date.now() - this.UIOpenTime < 100) return
+
+    while (
+      this.NPCScript[this.activeTextId].skipable &&
+      !this.NPCScript[this.activeTextId].isQuestion
+    ) {
+      this.activeTextId += 1
+      if (
+        this.NPCScript[this.activeTextId].skipable &&
+        this.NPCScript[this.activeTextId].isEndOfDialog
+      ) {
+        this.closeDialogWindow()
+        return
+      }
+    }
+    this.activeTextId -= 1
+
+    this.confirmText(ConfirmMode.Next)
   }
 }
 
