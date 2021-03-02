@@ -240,7 +240,7 @@ export class DialogWindow {
     this.skipButton = new CustomDialogButton(
       this.container,
       this.uiTheme,
-      '...Skip',
+      'Skip',
       skipButtonXPos,
       skipButtonYPos,
       () => {
@@ -253,6 +253,7 @@ export class DialogWindow {
     this.skipButton.image.height = 30
     this.skipButton.label.fontSize = 12
     this.skipButton.label.positionX = 5
+    this.skipButton.label.font = SFHeavyFont
     this.skipButton.icon.height = 20
     this.skipButton.icon.width = 20
     this.skipButton.icon.positionX = -20
