@@ -88,7 +88,8 @@ export enum ButtonStyles {
   SQUAREBLACK = `squareblack`,
   SQUAREWHITE = `squarewhite`,
   SQUARESILVER = `squaresilver`,
-  SQUAREGOLD = `squaregold`
+  SQUAREGOLD = `squaregold`,
+  WHITE = `white`
 }
 
 /**

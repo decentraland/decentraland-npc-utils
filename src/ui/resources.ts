@@ -26,6 +26,12 @@ export default {
       sourceLeft: 512,
       sourceTop: 612
     },
+    white: {
+      sourceWidth: 174,
+      sourceHeight: 46,
+      sourceLeft: 698,
+      sourceTop: 662
+    },
     buttonRed: {
       sourceWidth: 174,
       sourceHeight: 46,
@@ -98,6 +104,18 @@ export default {
       sourceWidth: 26,
       sourceHeight: 26,
       sourceLeft: 733,
+      sourceTop: 611
+    },
+    EBlack: {
+      sourceWidth: 26,
+      sourceHeight: 26,
+      sourceLeft: 766,
+      sourceTop: 611
+    },
+    FBlack: {
+      sourceWidth: 26,
+      sourceHeight: 26,
+      sourceLeft: 802,
       sourceTop: 611
     }
   },

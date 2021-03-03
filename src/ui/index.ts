@@ -81,18 +81,19 @@ export class DialogWindow {
   EButtonAction: null | (() => false | Subscription[]) = null
   FButtonAction: null | (() => false | Subscription[]) = null
 
-  constructor(defaultPortrait?: ImageData, useDarkTheme?: boolean | Texture, sound?: string) {
+  constructor(
+    defaultPortrait?: ImageData,
+    useDarkTheme?: boolean,
+    sound?: string,
+    customTheme?: Texture
+  ) {
     this.defaultPortrait = defaultPortrait ? defaultPortrait : null
 
-    this.uiTheme =
-      useDarkTheme === true ? darkTheme : useDarkTheme === false ? lightTheme : useDarkTheme
-
-    //   useDarkTheme instanceof Texture
-    //     ? useDarkTheme
-    //     : useDarkTheme == true
-    //     ? darkTheme
-    //     : lightTheme
-    //this.uiTheme =useDarkTheme == true ? darkTheme : lightTheme
+    if (customTheme) {
+      this.uiTheme = customTheme
+    } else {
+      this.uiTheme = useDarkTheme ? darkTheme : lightTheme
+    }
 
     // Container
     this.container = new UIContainerRect(canvas)
@@ -247,7 +248,7 @@ export class DialogWindow {
         this.skipDialogs()
       },
       false,
-      ButtonStyles.F
+      darkTheme ? ButtonStyles.WHITE : ButtonStyles.F
     )
     this.skipButton.image.width = 80
     this.skipButton.image.height = 30
@@ -268,7 +269,7 @@ export class DialogWindow {
     this.leftClickIcon.visible = false
     setSection(
       this.leftClickIcon,
-      darkTheme ? resources.icons.ClickWhite : resources.icons.ClickDark
+      useDarkTheme ? resources.icons.ClickDark : resources.icons.ClickWhite
     )
 
     DialogTypeInSystem.createAndAddToEngine()
@@ -891,6 +892,22 @@ export class CustomDialogButton extends Entity {
           setSection(this.icon, resources.buttonLabels.F)
           this.icon.positionX = buttonIconPos(label.length)
           break
+
+        case ButtonStyles.WHITE:
+          setSection(this.image, resources.buttons.white)
+          this.label.positionX = 25
+
+          this.icon = new UIImage(this.image, useDarkTheme == true ? darkTheme : lightTheme)
+          this.icon.width = 26
+          this.icon.height = 26
+          // this.button1Icon.positionY = 15
+          this.icon.hAlign = 'center'
+          this.icon.vAlign = 'center'
+          this.icon.isPointerBlocker = false
+          setSection(this.icon, resources.buttonLabels.FBlack)
+          this.icon.positionX = buttonIconPos(label.length)
+          break
+
         case ButtonStyles.RED:
           setSection(this.image, resources.buttons.buttonRed)
           break
@@ -932,7 +949,9 @@ export class CustomDialogButton extends Entity {
     this.label.fontSize = 20
     this.label.font = SFFont
     this.label.color =
-      style == ButtonStyles.ROUNDWHITE || style == ButtonStyles.SQUAREWHITE
+      style == ButtonStyles.ROUNDWHITE ||
+      style == ButtonStyles.SQUAREWHITE ||
+      style == ButtonStyles.WHITE
         ? Color4.Black()
         : Color4.White()
     this.label.isPointerBlocker = false
