@@ -280,6 +280,22 @@ export class NPC extends Entity {
     this.lastPlayedAnim = newAnim
   }
 
+/**
+   * Change the idle animation on the NPC.
+   * @param {animation} string Name of the new animation to set as idle.
+   * @param {play} boolean If true, start playing this new idle animation.
+   */
+  changeIdleAnim(animation: string, play?: boolean){
+	this.idleAnim.stop()
+    this.idleAnim = new AnimationState(animation, { looping: true })
+    this.getComponent(Animator).addClip(this.idleAnim)  
+	if(play){
+		this.lastPlayedAnim.stop()
+		this.idleAnim.play()
+		this.lastPlayedAnim = this.idleAnim
+	}
+  }
+
   /**
    * Instruct the NPC to walk following a path. If no data is provided, the NPC uses data from the last time `followPath` was called, or its definition.
    * @param {FollowPathData} data Object with data to describe a path that an NPC can walk.

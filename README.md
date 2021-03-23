@@ -180,6 +180,21 @@ It can also take the following optional parameters:
 myNPC.playAnimation(`Head_Yes`, true, 2.63)
 ```
 
+### Change idle animation
+
+The NPC's idle animation is looped by default whenever the NPC is not playing any other animations. In some cases you may want to have different idle animations depending on the circumstances, like while in a conversation, or if the NPC changes its general attitude after some event.
+
+You set the NPC's idle animation when creating the NPC, using the `idleAnim` field. To change this animation at some later time, use `changeIdleAnim()`.
+
+The `changeIdleAnim()` function takes two arguments:
+
+- `animation`: The name of the new animation to set as the idle animation
+- `play`: Optionally pass this value as _true_ if you want this new animation to start playing right away.
+
+```ts
+myNPC.changeIdleAnim(`AngryIdle`, true)
+```
+
 ### Activate
 
 The `activate()` function can be used to trigger the `onActivate()` function, as an alternative to pressing E or walking near.
