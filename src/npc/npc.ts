@@ -5,6 +5,7 @@ import { TrackUserFlag } from './faceUserSystem'
 import { TriggerSphereShape, NPCTriggerComponent } from '../trigger/triggerSystem'
 import { NPCDelay } from '../utils/timerComponents'
 import { NPCLerpData, walkingNPCGroup } from './move'
+import { DialogBubble } from '../ui/bubble'
 
 /**
  * Creates a talking, walking and animated NPC
@@ -18,6 +19,7 @@ import { NPCLerpData, walkingNPCGroup } from './move'
 export class NPC extends Entity {
   public introduced: boolean = false
   public dialog: DialogWindow
+  public bubble: DialogBubble | undefined
   public onActivate: () => void
   public onWalkAway: null | (() => void) = null
   public continueOnWalkAway: boolean = false
@@ -32,6 +34,7 @@ export class NPC extends Entity {
   public closeDialogTimer: Entity
   public pauseWalkingTimer: Entity
   public state: NPCState
+  public bubbleHeight: number = 2
   /**
    * Creates a talking, walking and animated NPC
    *
@@ -54,7 +57,8 @@ export class NPC extends Entity {
 
     this.state = NPCState.STANDING
 
-    if (data && data.portrait) {
+	// dialogs
+	if (data && data.noUI){} else if (data && data.portrait) {
       this.dialog = new DialogWindow(
         typeof data.portrait === `string` ? { path: data.portrait } : data.portrait,
         data && data.darkUI ? data.darkUI : false,
@@ -67,6 +71,18 @@ export class NPC extends Entity {
         data && data.dialogSound ? data.dialogSound : undefined
       )
     }
+
+	if (data && data.textBubble) {
+		if (data && data.bubbleHeight) {
+			this.bubbleHeight = data.bubbleHeight
+		  }
+		  this.bubble = new DialogBubble(this, this.bubbleHeight, data.dialogSound ? data.dialogSound : undefined)
+	}
+
+	
+
+
+	  // animations
     this.addComponent(new Animator())
 
     this.idleAnim = new AnimationState(data && data.idleAnim ? data.idleAnim : 'Idle', {
@@ -162,6 +178,8 @@ export class NPC extends Entity {
       this.faceUser = true
     }
 
+
+
     if (data && data.walkingSpeed) {
       this.walkingSpeed = data.walkingSpeed
     }
@@ -244,6 +262,29 @@ export class NPC extends Entity {
       )
     }
   }
+
+
+  /**
+   * Starts a conversation, using the Dialog UI
+   * @param {Dialog[]} script Instructions to follow during the conversation
+   * @param {number|string} startIndex Where to start in the script. Can refer to an index in the array or the `name` field of a Dialog entry.
+   *
+   */
+   talkBubble(script: Dialog[], startIndex?: number | string) {
+    // this.introduced = true
+    // this.state = NPCState.TALKING
+    // if (this.closeDialogTimer.hasComponent(NPCDelay)) {
+    //   this.closeDialogTimer.removeComponent(NPCDelay)
+    // }
+
+	if(!this.bubble){
+		this.bubble = new DialogBubble(this, this.bubbleHeight)
+	}
+
+    this.bubble.openDialogWindow(script, startIndex ? startIndex : 0)
+
+  }
+
   /**
    * The NPC model plays an animation
    * @param {string} animationName Name of the animation to play, as stored in the model
