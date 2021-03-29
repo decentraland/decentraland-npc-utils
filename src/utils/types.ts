@@ -14,6 +14,8 @@
  * @property {boolean} isFixedScreen If true, has no buttons or "next page" functionality
  * @property {ButtonData[]} buttons An array of buttons `ButtonData` objects to use in a question entry
  * @property {string} audio Path to sound file to play when the dialog is shown in the UI
+ * @property {boolean} skipable If true, a "Skip" button on the UI lets players skip to the next non-skipable entry.
+ * @property {number} timeOn How long to keep the text visible before moving on to the next entry. Only for bubble dialogs!
  *
  */
 export type Dialog = {
@@ -32,6 +34,7 @@ export type Dialog = {
   buttons?: ButtonData[]
   audio?: string
   skipable?: boolean
+  timeOn?: number
 }
 
 /**
@@ -112,7 +115,10 @@ export enum ButtonStyles {
  * @property {string} walkingAnim Animation to play when walking with followPath
  * @property {number} walkingSpeed Default speed to use when walking with followPath
  * @property {Vector3[]} path Array of Vector3 points representing the default path to walk over. The NPC will walk looping over these points
- *
+* @property {boolean} textBubble If true, the NPC can display text bubbles with dialogs
+ * @property {number} bubbleHeight The default height to display text bubbles over the NPC's position
+ * @property {boolean} noUI If true, no UI dialog elements are constructed. The NPC can use speech bubbles.
+*
  */
 export type NPCData = {
   portrait?: string | ImageData
@@ -132,6 +138,10 @@ export type NPCData = {
   walkingAnim?: string
   walkingSpeed?: number
   path?: Vector3[]
+  textBubble?: boolean
+  bubbleHeight?: number
+  noUI?: boolean
+  
 }
 
 /**

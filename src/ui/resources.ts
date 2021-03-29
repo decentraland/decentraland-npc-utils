@@ -330,5 +330,31 @@ export default {
       sourceLeft: 921,
       sourceTop: 501
     }
-  }
+  },
+  bubbles: {
+    short: {
+      sourceWidth: 116 * 2,
+      sourceHeight: 84 * 2,
+      sourceLeft: 305 * 2,
+      sourceTop: 417 * 2,
+    },
+    normal: {
+      sourceWidth: 286 * 2,
+      sourceHeight: 84 * 2,
+      sourceLeft: 8 * 2,
+      sourceTop: 417 * 2,
+    },
+    long: {
+      sourceWidth: 497 * 2,
+      sourceHeight: 153 * 2,
+      sourceLeft: 6 * 2,
+      sourceTop: 254 * 2,
+    },
+    huge: {
+      sourceWidth: 497 * 2,
+      sourceHeight: 239 * 2,
+      sourceLeft: 6 * 2,
+      sourceTop: 7 * 2,
+    },
+  },
 }
