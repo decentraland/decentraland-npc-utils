@@ -55,7 +55,7 @@ export class DialogBubble {
   public panel: Entity
 
   public text: Entity
-  public material: Material
+  public material: BasicMaterial
   public isDialogOpen: boolean = false
   public activeTextId: number = 0
   public uiTheme: Texture
@@ -78,11 +78,8 @@ export class DialogBubble {
     this.container.setParent(parent)
 
     // Material
-    this.material = new Material()
-    this.material.albedoTexture = bubblesTexture
-    this.material.alphaTexture = bubblesTexture
-    this.material.transparencyMode = TransparencyMode.ALPHA_BLEND
-    this.material.alphaTest = 0.1
+	this.material = new BasicMaterial()
+	this.material.texture = bubblesTexture
 
     // Background Panel
     this.panel = new Entity()
