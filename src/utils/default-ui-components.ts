@@ -11,7 +11,7 @@ export let lightTheme = new Texture('https://decentraland.org/images/ui/light-at
 export let darkTheme = new Texture('https://decentraland.org/images/ui/dark-atlas-v3.png')
 
 
-export let bubblesTexture = new Texture('images/DialogBubbles.png')
+export let bubblesTexture = new Texture('https://decentraland.org/images/ui/dialog-bubbles.png')
 
 
 
