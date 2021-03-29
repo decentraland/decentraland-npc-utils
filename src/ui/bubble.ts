@@ -37,7 +37,7 @@ let longBubbleY = 153 * 0.005
 let hugeBubbleX = 497 * 0.005
 let hugeBubbleY = 239 * 0.005
 
-let defaultYOffset = 2.2
+let defaultYOffset = 2.5
 
 export let bubblesTexture = new Texture('images/DialogBubbles.png')
 
@@ -56,7 +56,7 @@ export class DialogBubble {
 
   public text: Entity
   public material: BasicMaterial
-  public isDialogOpen: boolean = false
+  public isBubleOpen: boolean = false
   public activeTextId: number = 0
   public uiTheme: Texture
   public soundEnt: Entity
@@ -218,7 +218,7 @@ export class DialogBubble {
     // }
 
     this.layoutDialogWindow(this.activeTextId)
-    this.isDialogOpen = true
+    this.isBubleOpen = true
   }
 
   private adjustBubble(textLength: number): void {
@@ -349,8 +349,8 @@ export class DialogBubble {
    * Closes a dialog UI.
    */
   public closeDialogWindow(): void {
-    if (this.isDialogOpen) {
-      this.isDialogOpen = false
+    if (this.isBubleOpen) {
+      this.isBubleOpen = false
 
       this.text.getComponent(TextShape).value = ''
       this.text.getComponent(TextShape).visible = false
@@ -360,7 +360,7 @@ export class DialogBubble {
   }
 
   public skipDialogs() {
-    if (!this.isDialogOpen) return
+    if (!this.isBubleOpen) return
 
     while (
       this.NPCScript[this.activeTextId].skipable &&
