@@ -37,7 +37,7 @@ let longBubbleY = 153 * 0.005
 let hugeBubbleX = 497 * 0.005
 let hugeBubbleY = 239 * 0.005
 
-let defaultYOffset = 2
+let defaultYOffset = 2.2
 
 export let bubblesTexture = new Texture('images/DialogBubbles.png')
 
@@ -91,6 +91,7 @@ export class DialogBubble {
     this.panel.setParent(this.container)
     this.panel.addComponent(new PlaneShape())
     this.panel.addComponent(this.material)
+	this.panel.getComponent(PlaneShape).visible = false
 
     setUVSection(
       this.panel.getComponent(PlaneShape),
@@ -117,6 +118,7 @@ export class DialogBubble {
     this.text.getComponent(TextShape).fontSize = textSize
     this.text.getComponent(TextShape).fontWeight = 'normal'
     this.text.getComponent(TextShape).color = Color3.Black()
+	this.text.getComponent(TextShape).visible = false
 
     this.soundEnt = new Entity()
 
