@@ -124,7 +124,7 @@ export class NPC extends Entity {
     this.addComponent(
       new OnPointerDown(
         e => {
-          if (this.inCooldown || this.dialog.isDialogOpen) return
+          if (this.inCooldown || (this.dialog && this.dialog.isDialogOpen)) return
 
           this.activate()
         },
@@ -157,7 +157,7 @@ export class NPC extends Entity {
                 log(this.name, ' in cooldown')
                 return
               } else if (
-                this.dialog.isDialogOpen ||
+                (this.dialog && this.dialog.isDialogOpen) ||
                 (data && data.onlyExternalTrigger) ||
                 (data && data.onlyClickTrigger)
               ) {
@@ -218,7 +218,7 @@ export class NPC extends Entity {
     if (this.faceUser) {
       this.getComponent(TrackUserFlag).active = false
     }
-    if (this.dialog.isDialogOpen) {
+    if (this.dialog && this.dialog.isDialogOpen) {
       this.dialog.closeDialogWindow()
     }
     this.state = NPCState.STANDING
@@ -460,7 +460,7 @@ export class NPC extends Entity {
     if (duration) {
       this.pauseWalkingTimer.addComponentOrReplace(
         new NPCDelay(duration, () => {
-          if (this.dialog.isDialogOpen) return
+          if (this.dialog && this.dialog.isDialogOpen) return
           this.lastPlayedAnim.stop()
           if (this.walkingAnim) {
             this.walkingAnim.play()
