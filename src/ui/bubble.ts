@@ -279,15 +279,20 @@ export class DialogBubble {
   public next(): void {
     let currentText = this.NPCScript[this.activeTextId]
 
-    // Update active text
+	if(!currentText){
+		currentText = this.NPCScript[this.activeTextId-1]
+	}
 
     if (currentText.triggeredByNext) {
       currentText.triggeredByNext()
     }
-    if (currentText.isEndOfDialog) {
-      this.closeDialogWindow()
-      return
-    }
+
+	if (currentText.isEndOfDialog) {
+		this.closeDialogWindow()
+		return
+	  }
+   
+	 // Update active text
     this.activeTextId++
 
     // Update active text with new active text
@@ -416,6 +421,7 @@ export class WorldDialogTypeInSystem implements ISystem {
       if (this.timer > this.timeOn) {
         this.showing = false
         this.done = true
+		this.timer = 0
         this.window.next()
       }
     } else if (this.timer >= 2 / this.speed) {
