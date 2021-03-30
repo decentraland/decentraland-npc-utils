@@ -51,7 +51,7 @@ export class DialogBubble {
   public NPCScript: Dialog[] = []
   public container: Entity
   public panel: Entity
-
+  public rootEntity: Entity
   public text: Entity
   public material: BasicMaterial
   public isBubleOpen: boolean = false
@@ -65,15 +65,21 @@ export class DialogBubble {
   constructor(parent: Entity, height?: number, sound?: string) {
     this.baseYOffset = height ? height : defaultYOffset
 
-    // Container
-    this.container = new Entity()
-    this.container.addComponent(new Billboard(false, true, false))
-    this.container.addComponent(
-      new Transform({
-        position: new Vector3(shortBubbleXOffset, this.baseYOffset, 0),
-      })
-    )
-    this.container.setParent(parent)
+   // Root
+   this.rootEntity = new Entity()
+   this.rootEntity.addComponent(new Billboard(false, true, false))
+   this.rootEntity.addComponent(new Transform())
+   this.rootEntity.setParent(parent)
+
+   // Container
+   this.container = new Entity()
+   //this.container.addComponent(new Billboard(false, true, false))
+   this.container.addComponent(
+	 new Transform({
+	   position: new Vector3(shortBubbleXOffset, this.baseYOffset, 0),
+	 })
+   )
+   this.container.setParent(this.rootEntity)
 
     // Material
 	this.material = new BasicMaterial()
