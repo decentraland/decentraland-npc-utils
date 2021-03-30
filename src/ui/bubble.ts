@@ -1,4 +1,4 @@
-import { setUVSection, SFHeavyFont } from "../utils/default-ui-components"
+import { bubblesTexture, setUVSection, SFHeavyFont } from "../utils/default-ui-components"
 import { Dialog } from "../utils/types"
 import resources from "./resources"
 
@@ -38,8 +38,6 @@ let hugeBubbleX = 497 * 0.005
 let hugeBubbleY = 239 * 0.005
 
 let defaultYOffset = 2.5
-
-export let bubblesTexture = new Texture('images/DialogBubbles.png')
 
 /**
  * Displays an in-world panel as a speech bubble, with text from an array of Dialog objects.
