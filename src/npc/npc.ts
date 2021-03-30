@@ -221,6 +221,9 @@ export class NPC extends Entity {
     if (this.dialog && this.dialog.isDialogOpen) {
       this.dialog.closeDialogWindow()
     }
+	if(this.bubble && this.bubble.isBubleOpen){
+		this.bubble.closeDialogWindow()
+	}
     this.state = NPCState.STANDING
   }
   /**
@@ -251,6 +254,10 @@ export class NPC extends Entity {
     if (this.closeDialogTimer.hasComponent(NPCDelay)) {
       this.closeDialogTimer.removeComponent(NPCDelay)
     }
+
+	if(this.bubble && this.bubble.isBubleOpen){
+		this.bubble.closeDialogWindow()
+	}
 
     this.dialog.openDialogWindow(script, startIndex ? startIndex : 0)
 
