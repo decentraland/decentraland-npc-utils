@@ -1,5 +1,5 @@
 import { DialogWindow } from '../ui/index'
-import { Dialog, FollowPathData, NPCData, NPCState } from '../utils/types'
+import { Dialog, FollowPathData, NPCData, NPCState, TriggerData } from '../utils/types'
 import { TrackUserFlag } from './faceUserSystem'
 
 import { TriggerSphereShape, NPCTriggerComponent } from '../trigger/triggerSystem'
@@ -22,7 +22,6 @@ export class NPC extends Entity {
   public bubble: DialogBubble | undefined
   public onActivate: () => void
   public onWalkAway: null | (() => void) = null
-  public continueOnWalkAway: boolean = false
   public inCooldown: boolean = false
   public coolDownDuration: number = 5
   public faceUser: boolean = false
@@ -105,10 +104,6 @@ export class NPC extends Entity {
       this.onWalkAway = data.onWalkAway
     }
 
-    if (data && data.continueOnWalkAway) {
-      this.continueOnWalkAway = data.continueOnWalkAway
-    }
-
     this.endAnimTimer = new Entity()
     engine.addEntity(this.endAnimTimer)
 
@@ -140,38 +135,54 @@ export class NPC extends Entity {
       this.removeComponent(OnPointerDown)
     }
 
-    // trigger when player walks near
+	// Trigger
+	let triggerData: TriggerData = { 
+	}
+
+	// when exiting trigger
+	if (
+		!data ||
+		(data && !data.continueOnWalkAway)
+	  ) {
+		triggerData.onCameraExit = () => {
+		this.handleWalkAway()
+	  }
+	}
+
+    // when entering trigger
     if (
       !data ||
       (data && !data.onlyExternalTrigger && !data.onlyClickTrigger && !data.onlyETrigger)
     ) {
-      this.addComponent(
-        new NPCTriggerComponent(
-          new TriggerSphereShape(
-            data && data.reactDistance ? data.reactDistance : 6,
-            Vector3.Zero()
-          ),
-          {
-            onCameraEnter: () => {
-              if (this.inCooldown) {
-                log(this.name, ' in cooldown')
-                return
-              } else if (
-                (this.dialog && this.dialog.isDialogOpen) ||
-                (data && data.onlyExternalTrigger) ||
-                (data && data.onlyClickTrigger)
-              ) {
-                return
-              }
-              this.activate()
-            },
-            onCameraExit: () => {
-              this.handleWalkAway()
-            }
-          }
-        )
-      )
+		triggerData.onCameraEnter = () => {
+			if (this.inCooldown) {
+			  log(this.name, ' in cooldown')
+			  return
+			} else if (
+			  (this.dialog && this.dialog.isDialogOpen) ||
+			  (data && data.onlyExternalTrigger) ||
+			  (data && data.onlyClickTrigger)
+			) {
+			  return
+			}
+			this.activate()
+		  }
     }
+
+	// add trigger
+	if(triggerData.onCameraEnter || triggerData.onCameraExit){
+		this.addComponent(
+			new NPCTriggerComponent(
+			  new TriggerSphereShape(
+				data && data.reactDistance ? data.reactDistance : 6,
+				Vector3.Zero()
+			  ),
+			  triggerData
+			)
+		  )
+	}
+
+
 
     if (data && data.faceUser) {
       this.addComponent(new TrackUserFlag(true, data.turningSpeed ? data.turningSpeed : undefined))
@@ -234,9 +245,9 @@ export class NPC extends Entity {
       //|| this.state == NPCState.FOLLOWPLAYER
       return
     }
-    if (!this.continueOnWalkAway) {
-      this.endInteraction()
-    }
+   
+    this.endInteraction()
+    
     if (this.onWalkAway) {
       this.onWalkAway()
     }
