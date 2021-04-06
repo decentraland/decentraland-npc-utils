@@ -594,7 +594,7 @@ For details on how to construct the dialog tree, see the sections above. The req
 In order to test changes made to this repository in active scenes, do the following:
 
 1. Run `npm run link` on this repository
-2. On the scene directory, after you installed the dependency, run `npm link @dcl/ui-scene-utils`
+2. On the scene directory, after you installed the dependency, run `npm link @dcl/npc-scene-utils`
 
 
 ## CI/CD
