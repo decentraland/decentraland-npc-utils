@@ -743,6 +743,7 @@ export class DialogWindow {
     if (!this.isDialogOpen || +Date.now() - this.UIOpenTime < 100) return
 
     while (
+		this.NPCScript[this.activeTextId] &&
       this.NPCScript[this.activeTextId].skipable &&
       !this.NPCScript[this.activeTextId].isQuestion
     ) {

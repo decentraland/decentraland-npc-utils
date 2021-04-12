@@ -22,7 +22,7 @@ export function setUVs(
 	_uv11: Vector2,
 	_uv01: Vector2
   ) {
-	log(_uv00, _uv10, _uv11, _uv01)
+	//log(_uv00, _uv10, _uv11, _uv01)
 	plane.uvs = [
 	  _uv00.x,
 	  _uv00.y,
