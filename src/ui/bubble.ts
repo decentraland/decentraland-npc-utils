@@ -318,6 +318,8 @@ export class DialogBubble {
       currentText.timeOn ? currentText.timeOn : undefined,
       currentText.typeSpeed ? currentText.typeSpeed : undefined
     )
+	this.layoutDialogWindow(this.activeTextId)
+
   }
 
   // Adds the buttons or mouse icon depending on the type of window
@@ -371,26 +373,28 @@ export class DialogBubble {
   public skipDialogs() {
     if (!this.isBubleOpen) return
 
+
     while (
-      this.NPCScript[this.activeTextId].skipable &&
-      !this.NPCScript[this.activeTextId].isQuestion
+      this.NPCScript[this.activeTextId]
     ) {
-      this.activeTextId += 1
+
+		if (this.NPCScript[this.activeTextId].triggeredByNext) {
+			this.NPCScript[this.activeTextId].triggeredByNext()
+		  }
+      
       if (
-        this.NPCScript[this.activeTextId].skipable &&
         this.NPCScript[this.activeTextId].isEndOfDialog
       ) {
         this.closeDialogWindow()
         return
       }
+	  this.activeTextId += 1
     }
-    this.activeTextId -= 1
 
-    this.next()
   }
 }
 
-const DEFAULT_SPEED = 30
+const DEFAULT_SPEED = 45
 
 const DEFAULT_TIME_ON = 3
 
@@ -401,7 +405,9 @@ export class WorldDialogTypeInSystem implements ISystem {
   speed: number = DEFAULT_SPEED
   visibleChars: number = 0
   fullText: string = ''
+  Dialog: DialogBubble | null
   Text: TextShape | null = null
+  textId: number = 0
   done: boolean = true
   showing: boolean = false
   timeOn: number = DEFAULT_TIME_ON
@@ -452,10 +458,27 @@ export class WorldDialogTypeInSystem implements ISystem {
     timeOn?: number,
     speed?: number
   ) {
+
+	// prevent circular loops
+	if(dialog == this.Dialog && textId == this.textId){
+		return
+	}
+
+	let oldDialog = this.Dialog
+
+	this.Dialog = dialog
+	this.Text = this.Dialog.text.getComponent(TextShape)
+	this.textId = textId
+
+	if(oldDialog && dialog != oldDialog){
+		oldDialog.skipDialogs()
+	} 
+	
+
     this.timer = 0
     this.done = false
     this.showing = false
-    this.Text = dialog.text.getComponent(TextShape)
+    
     this.fullText = text
     this.visibleChars = 0
     this.window = dialog
@@ -475,7 +498,7 @@ export class WorldDialogTypeInSystem implements ISystem {
     }
 
     // Buttons & action icons
-    dialog.layoutDialogWindow(textId)
+    //dialog.layoutDialogWindow(textId)
   }
   rush() {
     this.showing = true

@@ -593,8 +593,12 @@ For details on how to construct the dialog tree, see the sections above. The req
 
 In order to test changes made to this repository in active scenes, do the following:
 
-1. Run `npm run link` on this repository
-2. On the scene directory, after you installed the dependency, run `npm link @dcl/npc-scene-utils`
+1. Run `npm run build` for the internal files of the library to be generated
+2. Run `npm run link` on this repository
+3. On a new Decentraland scene, import this library as you normally would and include the tests you need
+4. On the scene directory, run `npm link @dcl/npc-scene-utils`
+
+> Note: When done testing, run `npm unlink` on both folders, so that the scene stops using the local version of the library.
 
 
 ## CI/CD

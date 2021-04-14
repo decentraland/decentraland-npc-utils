@@ -747,7 +747,10 @@ export class DialogWindow {
       this.NPCScript[this.activeTextId].skipable &&
       !this.NPCScript[this.activeTextId].isQuestion
     ) {
-      this.activeTextId += 1
+	  if (this.NPCScript[this.activeTextId].triggeredByNext) {
+			this.NPCScript[this.activeTextId].triggeredByNext()
+	  }
+     
       if (
         this.NPCScript[this.activeTextId].skipable &&
         this.NPCScript[this.activeTextId].isEndOfDialog
@@ -755,8 +758,9 @@ export class DialogWindow {
         this.closeDialogWindow()
         return
       }
+	  this.activeTextId += 1
     }
-    this.activeTextId -= 1
+    //this.activeTextId -= 1
 
     this.confirmText(ConfirmMode.Next)
   }

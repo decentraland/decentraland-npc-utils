@@ -452,7 +452,13 @@ export class NPC extends Entity {
       lerp.speed.push(1 / ((pointsDist[i] / totalDist) * lerp.totalDuration))
     }
 
+
+		
+
     if (this.walkingAnim) {
+		if(this.endAnimTimer.hasComponent(NPCDelay)){
+			this.endAnimTimer.removeComponent(NPCDelay)
+		}
       this.idleAnim.stop()
       this.lastPlayedAnim.stop()
       this.walkingAnim.play()
