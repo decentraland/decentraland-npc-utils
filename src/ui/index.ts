@@ -766,7 +766,7 @@ export class DialogWindow {
   }
 }
 
-const DEFAULT_SPEED = 30
+const DEFAULT_SPEED = 45
 
 export class DialogTypeInSystem implements ISystem {
   static _instance: DialogTypeInSystem | null = null
@@ -798,10 +798,15 @@ export class DialogTypeInSystem implements ISystem {
       let charsToAdd = Math.floor(this.timer / (1 / this.speed))
       this.timer = 0
       this.visibleChars += charsToAdd
-      if (this.visibleChars >= this.fullText.length) {
+      
+	  // support <> tags
+	  this.closeTag(charsToAdd)
+
+	  if (this.visibleChars >= this.fullText.length) {
         this.done = true
         this.visibleChars = this.fullText.length
-      }
+	  }
+
       if (this.UIText) {
         this.UIText.value = this.fullText.substr(0, this.visibleChars)
       }
@@ -834,6 +839,35 @@ export class DialogTypeInSystem implements ISystem {
     if (this.UIText) {
       this.UIText.value = this.fullText
     }
+  }
+  closeTag(newChars: number){
+	  if(this.visibleChars == 0 || newChars ==0 ) return
+
+	let openTag: boolean = false
+	let closeTag : boolean = false
+	for(let i = this.visibleChars-newChars; i < this.visibleChars ; i++){
+		
+		if(!openTag){
+			if(this.fullText.substr(i, 1) == '<'){
+				openTag= true
+				
+			}
+		} else {
+			if(this.fullText.substr(i, 1) == '>'){
+				closeTag= true
+				
+			}
+		}
+	}
+
+	if(!openTag || closeTag){	
+		return
+	}
+
+	while(this.visibleChars < this.fullText.length && this.fullText.substr(this.visibleChars-1, 1) != '>'){
+		this.visibleChars+=1
+	}
+	return
   }
 }
 

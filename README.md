@@ -91,9 +91,12 @@ To configure other properties of an NPC, add a fourth argument as an `NPCData` o
 - `reactDistance`: _(number)_ Radius in meters for the player to activate the NPC or trigger the `onWalkAway()` function when leaving the radius.
 - `continueOnWalkAway`: _(boolean)_ If true,when the player walks out of the `reactDistance` radius, the dialog window stays open and the NPC keeps turning to face the player (if applicable). It doesn't affect the triggering of the `onWalkAway()` function.
 - `onWalkAway`: (_()=> void_) Function to call every time the player walks out of the `reactDistance` radius.
-- `walkingAnim`: Name of the walking animation on the model. This animation is looped when calling the `followPath()` function.
-- `walkingSpeed`: Speed of the NPC when walking. By default _2_.
-- `path`: Default path to walk. If a value is provided for this field on NPC initialization, the NPC will walk over this path in loop from the start.
+- `walkingAnim`: _(string)_ Name of the walking animation on the model. This animation is looped when calling the `followPath()` function.
+- `walkingSpeed`: _(number)_ Speed of the NPC when walking. By default _2_.
+- `path`: _(Vector3)_ Default path to walk. If a value is provided for this field on NPC initialization, the NPC will walk over this path in loop from the start.
+- `bubbleHeight`: _(number)_ The height at which to display the speech bubble above the head of the NPC.
+- `textBubble`: _(boolean)_ If true, NPC starts with a speech bubble object ready to be accessed from the start. Otherwise, they text bubble is only built on the first call to `talkBubble()` on the NPC.
+- `noUI`: _(boolean)_ If true, no UI object is built for UI dialogs for this NPC. This may help optimize the scene if this feature is not used.
 
 The `ImageData` type that can be used on the `portrait` field is an object that may include the following:
 
@@ -160,6 +163,24 @@ myNPC.talk(myScript, 0)
 ```
 
 Learn how to build a script object for NPCs in a section below.
+
+### Speech Bubbles
+
+Besides the UI dialog window, NPCs can show speech bubbles over their heads. This alternative is less invasive to the player, but also non-interactive. Players can't alter the pace of the conversation or provide answers to questions.
+
+For an NPC to talk with bubbles:
+
+```ts
+myNPC.talkBubble(myScript, 0)
+```
+
+The function takes the following **required** parameter:
+
+- `script`: _(Dialog[])_ This array contains the information to manage the conversation, including events that may be triggered, options to choose, etc.
+
+It can also take the following optional parameters:
+
+- `startIndex`: _(number | string)_ The _Dialog_ object from the `script` array to open first. By default this is _0_, the first element of the array. Pass a number to open the entry on a given array position, or pass a string to open the entry with a `name` property matching that string.
 
 ### Play Animations
 
@@ -336,7 +357,7 @@ export let lostCat: Dialog[] = [
 
 The `endInteraction()` function can be used to abruptly end interactions with the NPC.
 
-If applicable, it closes the dialog UI and makes the NPC stop rotating to face the player.
+If applicable, it closes the dialog UI, hides speech bubbles, and makes the NPC stop rotating to face the player.
 
 ```ts
 myNPC.endInteraction()
@@ -397,14 +418,17 @@ class Dialog {
 }
 ```
 
+> Note: A `Dialog` object can be used as an input both for the `talk()` function (that is displayed in the UI), and the `talkBubble()` function (that is displayed in a floating bubble over the NPC). Properties marked with `*` are only applicabe to UI dialogs. 
+
+
 You can set the following fields to change the appearance of a dialog:
 
 - `text`: The dialog text
 - `fontSize`: Size of the text
-- `offsetX`: Offset of the text on the X axis, relative to its normal position.
-- `offsetY`: Offset of the text on the Y axis, relative to its normal position.
-- `portrait`: Sets the portrait image to use on the left. This field expects a `Portrait` object.
-- `image`: Sets a second image to use on the right of the dialog, and slightly up. This field expects an `ImageData` object.
+- `offsetX *`: Offset of the text on the X axis, relative to its normal position.
+- `offsetY *`: Offset of the text on the Y axis, relative to its normal position.
+- `portrait *`: Sets the portrait image to use on the left. This field expects a `Portrait` object.
+- `image *`: Sets a second image to use on the right of the dialog, and slightly up. This field expects an `ImageData` object.
 
 The `ImageData` required for the `portrait` and `image` fields, may include the following:
 
@@ -418,18 +442,44 @@ The `ImageData` required for the `portrait` and `image` fields, may include the 
 Other fields:
 
 - `name`: Optionally add a name to an entry, this serves to more easily refer to an entry.
-- `buttons`: An array of buttons to use in a question entry, covered in the next section.
+- `buttons *`: An array of buttons to use in a question entry, covered in the next section.
 - `audio`: String with the path to an audio file to play once when this dialog is shown on the UI.
 - `typeSpeed`: The text appears one character at a time, simulating typing. Players can click to skip the animation. Tune the speed of this typing (30 by default) to go slower or faster. Set to _-1_ to skip the animation.
-- `skipable`: If true, a "Skip" button appears in the corner to let players jump to the next non-skipable dialog, or close the dialog. Question dialogs can't be skiped.
+- `skipable *`: If true, a "Skip" button appears in the corner to let players jump to the next non-skipable dialog, or close the dialog. Question dialogs can't be skiped.
 
 <img src="screenshots/NPC4.gif" width="500">
+
+Add format tags within the `text` string to accentuate parts of the text. 
+
+- Use `<b></b>` for **bold**
+- Use `<i></i>` for _italics_
+- Use `<color="red"></color>` to color text
+
+For example:
+
+```ts
+export let NPCTalk: Dialog[] = [
+  {
+    text: 'This is <b>BOLD</b>'
+  },
+  {
+    text: 'This is <i>italic</i>'
+  },
+  {
+    text: 'This is <color="red">red</color>',
+    isEndOfDialog: true
+  }
+]
+```
+
 
 #### Questions and conversation trees
 
 The script can include questions that prompt the player to pick between two or up to four options. These questions can branch the conversation out and trigger other actions in the scene.
 
 <img src="screenshots/NPC2.png" width="500">
+
+> Note: Questions are only used by UI dialogs. If used in a speech bubble, questions will be displayed as regular entries with no buttons or options.
 
 To make an entry a question, set the `isQuestion` field to _true_. This displays a set of buttons rather than the click icon. It also disables the click to advance to the next entry.
 
@@ -482,9 +532,9 @@ export let GemsMission: Dialog[] = [
 
 #### Triggering functions from the dialog
 
-You can run functions that may affect any other part of your scene, that get triggered by how the player interacts with the dialog window.
+You can run functions that may affect any other part of your scene. These functions get triggered when the player interacts with the dialog window, or when the NPC displays speech bubbles.
 
-- `triggeredByNext`: Is executed when the player advances to the next dialog on a non-question dialog. The function also gets called if the dialog is the end of the conversation.
+- `triggeredByNext`: Is executed when the player advances to the next dialog on a non-question dialog. The function also gets called if the dialog is the end of the conversation. It also gets called when a speech bubble advances to the next entry.
 
 - `triggeredActions`: This property is associated to a button and is executed on a question dialog if the player activates the corresponding button. You can have up to 4 different buttons per entry, each with its own actions.
 
