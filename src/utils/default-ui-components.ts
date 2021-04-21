@@ -10,6 +10,8 @@ export let SFHeavyFont = new Font(Fonts.SanFrancisco_Heavy)
 export let lightTheme = new Texture('https://decentraland.org/images/ui/light-atlas-v3.png')
 export let darkTheme = new Texture('https://decentraland.org/images/ui/dark-atlas-v3.png')
 
+export let bubblesTexture = new Texture('https://decentraland.org/images/ui/dialog-bubbles.png')
+
 
 export function setUVs(
 	plane: PlaneShape,
