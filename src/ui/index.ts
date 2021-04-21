@@ -168,13 +168,14 @@ export class DialogWindow {
     this.text = new UIText(this.container)
     this.text.adaptWidth = false
     this.text.textWrapping = true
-    this.text.width = 450 * UIscaleMultiplier
-    this.text.positionX = 20 * UIscaleMultiplier
+    this.text.width = 460 * UIscaleMultiplier
+    this.text.positionX = 40 * UIscaleMultiplier
     this.text.hAlign = 'center'
     this.text.vAlign = 'center'
     this.text.font = SFHeavyFont
     this.text.fontSize = textSize
-    this.text.hTextAlign = 'center'
+    //this.text.hTextAlign = 'center'
+	this.text.hTextAlign = 'left'
     this.text.vTextAlign = 'center'
     this.text.positionY = textYPos
 
