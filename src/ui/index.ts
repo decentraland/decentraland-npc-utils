@@ -17,31 +17,43 @@ export enum ConfirmMode {
   Button4 = 4
 }
 
-let portraitXPos = -350
-let portraitYPos = 0
+export let UIscaleMultiplier = 0.75
 
-let imageXPos = 350
-let imageYPos = 50
+let portraitXPos = -350 * UIscaleMultiplier 
+let portraitYPos = 0 * UIscaleMultiplier
 
-let textSize = 24
-let textYPos = 10
+let imageXPos = 350 * UIscaleMultiplier
+let imageYPos = 50 * UIscaleMultiplier
 
-let buttonTextSise = 18
+let portraitScale = 256 * UIscaleMultiplier 
+let imageScale = 256 * UIscaleMultiplier 
 
-let button1XPos = 150
-let button2XPos = -80
-let button3XPos = -80
-let button4XPos = 150
+let textSize = 24 * UIscaleMultiplier
+let textYPos = 10 * UIscaleMultiplier
 
-let button1YPos = -65
-let button2YPos = -65
-let button1YPos4 = -20
-let button2YPos4 = -20
-let button3YPos = -80
-let button4YPos = -80
+let buttonWidth = 174* UIscaleMultiplier
+let buttonHeight = 46* UIscaleMultiplier
 
-let skipButtonXPos = -300
-let skipButtonYPos = -100
+
+let buttonTextSize = 20 * UIscaleMultiplier
+
+let button1XPos = 150 * UIscaleMultiplier
+let button2XPos = -80 * UIscaleMultiplier
+let button3XPos = -80 * UIscaleMultiplier
+let button4XPos = 150 * UIscaleMultiplier
+
+let button1YPos = -65 * UIscaleMultiplier
+let button2YPos = -65 * UIscaleMultiplier
+let button1YPos4 = -20 * UIscaleMultiplier
+let button2YPos4 = -20 * UIscaleMultiplier
+let button3YPos = -80 * UIscaleMultiplier
+let button4YPos = -80 * UIscaleMultiplier
+
+let skipButtonXPos = -300 * UIscaleMultiplier
+let skipButtonYPos = -100 * UIscaleMultiplier
+
+let buttonIconWidth = 26 * UIscaleMultiplier
+let buttonIconHeight = 26 * UIscaleMultiplier
 
 /**
  * Displays a UI screen with text from an array of Dialog objects. Each entry can also include a portrait image, questions with triggered actions by each, etc.
@@ -100,14 +112,14 @@ export class DialogWindow {
     this.container.adaptWidth = true
     this.container.width = '100%'
     this.container.vAlign = 'bottom'
-    this.container.positionY = 140
+    this.container.positionY = 140* UIscaleMultiplier
     this.container.visible = false
 
     // Text Panel
     this.panel = new UIImage(this.container, this.uiTheme)
     setSection(this.panel, resources.backgrounds.NPCDialog)
-    this.panel.width = 766
-    this.panel.height = 248
+    this.panel.width = 766  * UIscaleMultiplier
+    this.panel.height = 248 * UIscaleMultiplier
     this.panel.onClick = new OnClick((): void => {
       this.confirmText(ConfirmMode.Next)
     })
@@ -120,18 +132,18 @@ export class DialogWindow {
     this.portrait = new UIImage(this.container, this.defaultPortraitTexture)
 
     this.portrait.sourceWidth =
-      defaultPortrait && defaultPortrait.section ? defaultPortrait.section.sourceWidth : 256
+      defaultPortrait && defaultPortrait.section ? defaultPortrait.section.sourceWidth : 256 
     this.portrait.sourceHeight =
       defaultPortrait && defaultPortrait.section ? defaultPortrait.section.sourceHeight : 256
-    this.portrait.width = defaultPortrait && defaultPortrait.width ? defaultPortrait.width : 256
-    this.portrait.height = defaultPortrait && defaultPortrait.height ? defaultPortrait.height : 256
+    this.portrait.width = defaultPortrait && defaultPortrait.width ? defaultPortrait.width * UIscaleMultiplier : portraitScale
+    this.portrait.height = defaultPortrait && defaultPortrait.height ? defaultPortrait.height * UIscaleMultiplier : portraitScale
     this.portrait.positionX =
       defaultPortrait && defaultPortrait.offsetX
-        ? defaultPortrait.offsetX + portraitXPos
+        ? defaultPortrait.offsetX * UIscaleMultiplier + portraitXPos
         : portraitXPos
     this.portrait.positionY =
       defaultPortrait && defaultPortrait.offsetY
-        ? defaultPortrait.offsetY + portraitYPos
+        ? defaultPortrait.offsetY * UIscaleMultiplier + portraitYPos
         : portraitYPos
     this.portrait.onClick = new OnClick((): void => {
       this.confirmText(ConfirmMode.Next)
@@ -144,8 +156,8 @@ export class DialogWindow {
     this.image.sourceHeight = 256
     this.image.sourceTop = 0
     this.image.sourceLeft = 0
-    this.image.width = 256
-    this.image.height = 256
+    this.image.width = imageScale
+    this.image.height = imageScale
     this.image.positionX = imageXPos
     this.image.positionY = imageYPos
     this.image.onClick = new OnClick((): void => {
@@ -156,8 +168,8 @@ export class DialogWindow {
     this.text = new UIText(this.container)
     this.text.adaptWidth = false
     this.text.textWrapping = true
-    this.text.width = 450
-    this.text.positionX = 20
+    this.text.width = 450 * UIscaleMultiplier
+    this.text.positionX = 20 * UIscaleMultiplier
     this.text.hAlign = 'center'
     this.text.vAlign = 'center'
     this.text.font = SFHeavyFont
@@ -250,22 +262,23 @@ export class DialogWindow {
       false,
       darkTheme ? ButtonStyles.WHITE : ButtonStyles.F
     )
-    this.skipButton.image.width = 80
-    this.skipButton.image.height = 30
-    this.skipButton.label.fontSize = 12
-    this.skipButton.label.positionX = 5
+    this.skipButton.image.width = 80 * UIscaleMultiplier
+    this.skipButton.image.height = 30 * UIscaleMultiplier
+	this.skipButton.label.hTextAlign = 'left'
+    this.skipButton.label.fontSize = 12 * UIscaleMultiplier
+    this.skipButton.label.positionX = 40 * UIscaleMultiplier
     this.skipButton.label.font = SFHeavyFont
-    this.skipButton.icon.height = 20
-    this.skipButton.icon.width = 20
-    this.skipButton.icon.positionX = -20
+    this.skipButton.icon.height = 20 * UIscaleMultiplier
+    this.skipButton.icon.width = 20 * UIscaleMultiplier
+    this.skipButton.icon.positionX = -20 * UIscaleMultiplier
     this.skipButton.hide()
 
     // Left Click Icon
     this.leftClickIcon = new UIImage(this.container, this.uiTheme)
-    this.leftClickIcon.width = 32
-    this.leftClickIcon.height = 48
-    this.leftClickIcon.positionX = 340
-    this.leftClickIcon.positionY = -80
+    this.leftClickIcon.width = 32 * UIscaleMultiplier
+    this.leftClickIcon.height = 48 * UIscaleMultiplier
+    this.leftClickIcon.positionX = 340 * UIscaleMultiplier
+    this.leftClickIcon.positionY = -80 * UIscaleMultiplier
     this.leftClickIcon.visible = false
     setSection(
       this.leftClickIcon,
@@ -312,16 +325,16 @@ export class DialogWindow {
       this.portrait.source = new Texture(currentText.portrait.path)
 
       this.portrait.positionX = currentText.portrait.offsetX
-        ? currentText.portrait.offsetX + portraitXPos
+        ? currentText.portrait.offsetX * UIscaleMultiplier + portraitXPos
         : portraitXPos
 
       this.portrait.positionY = currentText.portrait.offsetY
-        ? currentText.portrait.offsetY + portraitYPos
+        ? currentText.portrait.offsetY * UIscaleMultiplier + portraitYPos
         : portraitYPos
 
-      this.portrait.width = currentText.portrait.width ? currentText.portrait.width : 256
+      this.portrait.width = currentText.portrait.width ? currentText.portrait.width * UIscaleMultiplier : portraitScale
 
-      this.portrait.height = currentText.portrait.height ? currentText.portrait.height : 256
+      this.portrait.height = currentText.portrait.height ? currentText.portrait.height * UIscaleMultiplier : portraitScale
 
       if (currentText.portrait.section) {
         setSection(this.portrait, currentText.portrait.section)
@@ -332,16 +345,16 @@ export class DialogWindow {
 
       this.portrait.positionX =
         this.defaultPortrait && this.defaultPortrait.offsetX
-          ? this.defaultPortrait.offsetX + portraitXPos
+          ? this.defaultPortrait.offsetX * UIscaleMultiplier + portraitXPos
           : portraitXPos
       this.portrait.positionY =
         this.defaultPortrait && this.defaultPortrait.offsetY
-          ? this.defaultPortrait.offsetY + portraitYPos
+          ? this.defaultPortrait.offsetY * UIscaleMultiplier + portraitYPos
           : portraitYPos
       this.portrait.width =
-        this.defaultPortrait && this.defaultPortrait.width ? this.defaultPortrait.width : 256
+        this.defaultPortrait && this.defaultPortrait.width ? this.defaultPortrait.width * UIscaleMultiplier : portraitScale
       this.portrait.height =
-        this.defaultPortrait && this.defaultPortrait.height ? this.defaultPortrait.height : 256
+        this.defaultPortrait && this.defaultPortrait.height ? this.defaultPortrait.height * UIscaleMultiplier : portraitScale
 
       if (this.defaultPortrait.section) {
         setSection(this.portrait, this.defaultPortrait.section)
@@ -358,11 +371,11 @@ export class DialogWindow {
       log('setting image to ', image.path)
       this.image.source = new Texture(image.path)
 
-      this.image.positionX = image.offsetX ? image.offsetX + imageXPos : imageXPos
-      this.image.positionY = image.offsetY ? image.offsetY + imageYPos : imageYPos
+      this.image.positionX = image.offsetX ? image.offsetX * UIscaleMultiplier + imageXPos : imageXPos
+      this.image.positionY = image.offsetY ? image.offsetY * UIscaleMultiplier + imageYPos : imageYPos
 
-      this.image.width = image.width ? image.width : 256
-      this.portrait.height = image.height ? image.height : 256
+      this.image.width = image.width ? image.width * UIscaleMultiplier : imageScale
+      this.portrait.height = image.height ? image.height * UIscaleMultiplier : imageScale
 
       if (image.section) {
         setSection(this.image, image.section)
@@ -374,9 +387,9 @@ export class DialogWindow {
 
     // Set text
     //this.text.value = currentText.text
-    this.text.fontSize = currentText.fontSize ? currentText.fontSize : textSize
-    this.text.positionY = currentText.offsetY ? currentText.offsetY + textYPos : textYPos
-    this.text.positionX = currentText.offsetX ? currentText.offsetX : 0
+    this.text.fontSize = currentText.fontSize ? currentText.fontSize * UIscaleMultiplier : textSize
+    this.text.positionY = currentText.offsetY ? currentText.offsetY * UIscaleMultiplier + textYPos : textYPos
+    this.text.positionX = currentText.offsetX ? currentText.offsetX * UIscaleMultiplier : 0
     this.text.visible = true
     this.container.visible = true
 
@@ -526,15 +539,15 @@ export class DialogWindow {
     let currentText: Dialog = this.NPCScript[textId] ? this.NPCScript[textId] : { text: '' }
 
     // Update text
-    let textY = currentText.offsetY ? currentText.offsetY + textYPos : textYPos
+    let textY = currentText.offsetY ? currentText.offsetY * UIscaleMultiplier + textYPos : textYPos
 
     if (currentText.buttons && currentText.buttons.length >= 3) {
-      textY += 50
+      textY += 50 *  UIscaleMultiplier
     } else if (currentText.buttons && currentText.buttons.length >= 1) {
-      textY += 24
+      textY += 24 * UIscaleMultiplier
     }
 
-    this.text.fontSize = currentText.fontSize ? currentText.fontSize : textSize
+    this.text.fontSize = currentText.fontSize ? currentText.fontSize * UIscaleMultiplier : textSize
     this.text.positionY = textY
 
     if (currentText.audio) {
@@ -550,16 +563,16 @@ export class DialogWindow {
       this.portrait.source = new Texture(currentText.portrait.path)
 
       this.portrait.positionX = currentText.portrait.offsetX
-        ? currentText.portrait.offsetX + portraitXPos
+        ? currentText.portrait.offsetX * UIscaleMultiplier+ portraitXPos
         : portraitXPos
 
       this.portrait.positionY = currentText.portrait.offsetY
-        ? currentText.portrait.offsetY + portraitYPos
+        ? currentText.portrait.offsetY* UIscaleMultiplier + portraitYPos
         : portraitYPos
 
-      this.portrait.width = currentText.portrait.width ? currentText.portrait.width : 256
+      this.portrait.width = currentText.portrait.width ? currentText.portrait.width * UIscaleMultiplier: portraitScale
 
-      this.portrait.height = currentText.portrait.height ? currentText.portrait.height : 256
+      this.portrait.height = currentText.portrait.height ? currentText.portrait.height * UIscaleMultiplier: portraitScale
 
       if (currentText.portrait.section) {
         setSection(this.portrait, currentText.portrait.section)
@@ -570,17 +583,17 @@ export class DialogWindow {
 
       this.portrait.positionX =
         this.defaultPortrait && this.defaultPortrait.offsetX
-          ? this.defaultPortrait.offsetX + portraitXPos
+          ? this.defaultPortrait.offsetX* UIscaleMultiplier + portraitXPos
           : portraitXPos
       this.portrait.positionY =
         this.defaultPortrait && this.defaultPortrait.offsetY
-          ? this.defaultPortrait.offsetY + portraitYPos
+          ? this.defaultPortrait.offsetY* UIscaleMultiplier + portraitYPos
           : portraitYPos
 
       this.portrait.width =
-        this.defaultPortrait && this.defaultPortrait.width ? this.defaultPortrait.width : 256
+        this.defaultPortrait && this.defaultPortrait.width ? this.defaultPortrait.width * UIscaleMultiplier: portraitScale
       this.portrait.height =
-        this.defaultPortrait && this.defaultPortrait.height ? this.defaultPortrait.height : 256
+        this.defaultPortrait && this.defaultPortrait.height ? this.defaultPortrait.height * UIscaleMultiplier: portraitScale
 
       if (this.defaultPortrait.section) {
         setSection(this.portrait, this.defaultPortrait.section)
@@ -599,11 +612,11 @@ export class DialogWindow {
       log('setting image to ', image.path)
       this.image.source = new Texture(image.path)
 
-      this.image.positionX = image.offsetX ? image.offsetX + imageXPos : imageXPos
-      this.image.positionY = image.offsetY ? image.offsetY + imageYPos : imageYPos
+      this.image.positionX = image.offsetX ? image.offsetX* UIscaleMultiplier + imageXPos : imageXPos
+      this.image.positionY = image.offsetY ? image.offsetY* UIscaleMultiplier + imageYPos : imageYPos
 
-      this.image.width = currentText.image.width ? currentText.image.width : 256
-      this.image.height = currentText.image.height ? currentText.image.height : 256
+      this.image.width = currentText.image.width ? currentText.image.width* UIscaleMultiplier : imageScale
+      this.image.height = currentText.image.height ? currentText.image.height* UIscaleMultiplier : imageScale
 
       if (image.section) {
         setSection(this.image, image.section)
@@ -631,14 +644,14 @@ export class DialogWindow {
         this.button1.update(
           currentText.buttons[0].label,
           currentText.buttons[0].offsetX
-            ? currentText.buttons[0].offsetX + button1XPos
+            ? currentText.buttons[0].offsetX * UIscaleMultiplier+ button1XPos
             : button1XPos,
           currentText.buttons.length >= 3
             ? currentText.buttons[0].offsetY
-              ? currentText.buttons[0].offsetY + button1YPos4
+              ? currentText.buttons[0].offsetY* UIscaleMultiplier + button1YPos4
               : button1YPos4
             : currentText.buttons[0].offsetY
-            ? currentText.buttons[0].offsetY + button1YPos
+            ? currentText.buttons[0].offsetY* UIscaleMultiplier + button1YPos
             : button1YPos
         )
       }
@@ -647,15 +660,15 @@ export class DialogWindow {
       if (currentText.buttons && currentText.buttons.length >= 2) {
         this.button2.update(
           currentText.buttons[1].label,
-          currentText.buttons[1].offsetX
-            ? currentText.buttons[1].offsetX + button2XPos
+          currentText.buttons[1].offsetX* UIscaleMultiplier
+            ? currentText.buttons[1].offsetX* UIscaleMultiplier + button2XPos
             : button2XPos,
           currentText.buttons.length >= 3
-            ? currentText.buttons[1].offsetY
-              ? currentText.buttons[1].offsetY + button2YPos4
+            ? currentText.buttons[1].offsetY* UIscaleMultiplier
+              ? currentText.buttons[1].offsetY* UIscaleMultiplier + button2YPos4
               : button2YPos4
-            : currentText.buttons[1].offsetY
-            ? currentText.buttons[1].offsetY + button2YPos
+            : currentText.buttons[1].offsetY* UIscaleMultiplier
+            ? currentText.buttons[1].offsetY* UIscaleMultiplier + button2YPos
             : button2YPos
         )
       }
@@ -664,11 +677,11 @@ export class DialogWindow {
       if (currentText.buttons && currentText.buttons.length >= 3) {
         this.button3.update(
           currentText.buttons[2].label,
-          currentText.buttons[2].offsetX
-            ? currentText.buttons[2].offsetX + button3XPos
+          currentText.buttons[2].offsetX* UIscaleMultiplier
+            ? currentText.buttons[2].offsetX* UIscaleMultiplier + button3XPos
             : button3XPos,
-          currentText.buttons[2].offsetY
-            ? currentText.buttons[2].offsetY + button3YPos
+          currentText.buttons[2].offsetY* UIscaleMultiplier
+            ? currentText.buttons[2].offsetY * UIscaleMultiplier+ button3YPos
             : button3YPos
         )
       }
@@ -677,11 +690,11 @@ export class DialogWindow {
       if (currentText.buttons && currentText.buttons.length >= 4) {
         this.button4.update(
           currentText.buttons[3].label,
-          currentText.buttons[3].offsetX
-            ? currentText.buttons[3].offsetX + button4XPos
+          currentText.buttons[3].offsetX* UIscaleMultiplier
+            ? currentText.buttons[3].offsetX* UIscaleMultiplier + button4XPos
             : button4XPos,
-          currentText.buttons[3].offsetY
-            ? currentText.buttons[3].offsetY + button4YPos
+          currentText.buttons[3].offsetY* UIscaleMultiplier
+            ? currentText.buttons[3].offsetY* UIscaleMultiplier + button4YPos
             : button4YPos
         )
       }
@@ -892,8 +905,8 @@ export class CustomDialogButton extends Entity {
     this.image = new UIImage(parent, texture)
     this.image.positionX = posX
     this.image.positionY = posY
-    this.image.width = 174
-    this.image.height = 46
+    this.image.width = buttonWidth
+    this.image.height = buttonHeight
 
     this.label = new UIText(this.image)
     this.style = style ? style : null
@@ -904,11 +917,11 @@ export class CustomDialogButton extends Entity {
       switch (this.style) {
         case ButtonStyles.E:
           setSection(this.image, resources.buttons.buttonE)
-          this.label.positionX = 25
+          this.label.positionX = 25 * UIscaleMultiplier
 
           this.icon = new UIImage(this.image, useDarkTheme == true ? darkTheme : lightTheme)
-          this.icon.width = 26
-          this.icon.height = 26
+          this.icon.width = buttonIconWidth
+          this.icon.height = buttonIconHeight
           // this.button1Icon.positionY = 15
           this.icon.hAlign = 'center'
           this.icon.vAlign = 'center'
@@ -919,11 +932,11 @@ export class CustomDialogButton extends Entity {
           break
         case ButtonStyles.F:
           setSection(this.image, resources.buttons.buttonF)
-          this.label.positionX = 25
+          this.label.positionX = 25 * UIscaleMultiplier
 
           this.icon = new UIImage(this.image, useDarkTheme == true ? darkTheme : lightTheme)
-          this.icon.width = 26
-          this.icon.height = 26
+          this.icon.width = buttonIconWidth
+          this.icon.height = buttonIconHeight
           // this.button1Icon.positionY = 15
           this.icon.hAlign = 'center'
           this.icon.vAlign = 'center'
@@ -934,11 +947,11 @@ export class CustomDialogButton extends Entity {
 
         case ButtonStyles.WHITE:
           setSection(this.image, resources.buttons.white)
-          this.label.positionX = 25
+          this.label.positionX = 25 * UIscaleMultiplier
 
           this.icon = new UIImage(this.image, useDarkTheme == true ? darkTheme : lightTheme)
-          this.icon.width = 26
-          this.icon.height = 26
+          this.icon.width = buttonIconWidth
+          this.icon.height = buttonIconHeight
           // this.button1Icon.positionY = 15
           this.icon.hAlign = 'center'
           this.icon.vAlign = 'center'
@@ -985,7 +998,7 @@ export class CustomDialogButton extends Entity {
     this.label.value = label
     this.label.hTextAlign = 'center'
     this.label.vTextAlign = 'center'
-    this.label.fontSize = 20
+    this.label.fontSize = buttonTextSize
     this.label.font = SFFont
     this.label.color =
       style == ButtonStyles.ROUNDWHITE ||
