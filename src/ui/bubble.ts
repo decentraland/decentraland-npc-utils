@@ -357,7 +357,7 @@ export class DialogBubble {
   }
 
   /**
-   * Closes a dialog UI.
+   * Closes the dialog bubble, executing associated triggeredByNext functions.
    */
   public closeDialogWindow(): void {
     if (this.isBubleOpen) {
@@ -367,6 +367,25 @@ export class DialogBubble {
       this.text.getComponent(TextShape).visible = false
 
       this.panel.getComponent(PlaneShape).visible = false
+    }
+  }
+
+   /**
+   * Closes the dialog bubble, and stops executed any associated triggeredByNext actions.
+   */
+  public closeDialogEndAll(): void {
+    if (this.isBubleOpen) {
+      this.isBubleOpen = false
+
+      this.text.getComponent(TextShape).value = ''
+      this.text.getComponent(TextShape).visible = false
+
+      this.panel.getComponent(PlaneShape).visible = false
+
+	  if(WorldDialogTypeInSystem._instance.Dialog == this){
+		WorldDialogTypeInSystem._instance.done = true
+	  }
+	  
     }
   }
 

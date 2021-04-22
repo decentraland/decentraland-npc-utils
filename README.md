@@ -182,6 +182,14 @@ It can also take the following optional parameters:
 
 - `startIndex`: _(number | string)_ The _Dialog_ object from the `script` array to open first. By default this is _0_, the first element of the array. Pass a number to open the entry on a given array position, or pass a string to open the entry with a `name` property matching that string.
 
+To interrupt the flow of an NPC's dialog windows, you can either:
+
+- Run `.endInteraction()` on the NPC
+- Run `.closeDialogWindow()` on the NPC's `bubble` object
+- Run `.closeDialogEndAll()` on the NPC's `bubble` object
+
+The first two options keep running any `triggeredByNext()` functions associated to the dialogs being shown on the bubble, the third option prevents running these.
+
 ### Play Animations
 
 By default, the NPC will loop an animation named 'Idle', or with a name passed in the `idleAnim` parameter.
