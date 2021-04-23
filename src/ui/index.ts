@@ -204,7 +204,7 @@ export class DialogWindow {
       () => {
         this.confirmText(ConfirmMode.Confirm)
       },
-      false,
+      useDarkTheme? true: false,
       ButtonStyles.E
     )
     this.button1.hide()
@@ -218,7 +218,7 @@ export class DialogWindow {
       () => {
         this.confirmText(ConfirmMode.Cancel)
       },
-      false,
+      useDarkTheme? true: false,
       ButtonStyles.F
     )
     this.button2.hide()
@@ -232,7 +232,7 @@ export class DialogWindow {
       () => {
         this.confirmText(ConfirmMode.Button3)
       },
-      false,
+      useDarkTheme? true: false,
       ButtonStyles.DARK
     )
     this.button3.hide()
@@ -246,7 +246,7 @@ export class DialogWindow {
       () => {
         this.confirmText(ConfirmMode.Button4)
       },
-      false,
+      useDarkTheme? true: false,
       ButtonStyles.DARK
     )
     this.button4.hide()
