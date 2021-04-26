@@ -340,7 +340,9 @@ export class DialogBubble {
     this.text.getComponent(TextShape).fontSize = currentText.fontSize
       ? currentText.fontSize
       : textSize
-    this.text.getComponent(Transform).position.y = textY
+    
+	this.text.getComponent(TextShape).visible = true
+	this.text.getComponent(Transform).position.y = textY
 
     if (currentText.audio) {
       this.soundEnt.addComponentOrReplace(
@@ -377,14 +379,14 @@ export class DialogBubble {
     if (this.isBubleOpen) {
       this.isBubleOpen = false
 
+	  if(WorldDialogTypeInSystem._instance.Dialog == this){
+		WorldDialogTypeInSystem._instance.done = true
+	  }
+
       this.text.getComponent(TextShape).value = ''
       this.text.getComponent(TextShape).visible = false
 
       this.panel.getComponent(PlaneShape).visible = false
-
-	  if(WorldDialogTypeInSystem._instance.Dialog == this){
-		WorldDialogTypeInSystem._instance.done = true
-	  }
 	  
     }
   }
