@@ -436,7 +436,6 @@ export class DialogWindow {
           if (
             this.isDialogOpen &&
             this.isQuestionPanel &&
-            DialogTypeInSystem._instance!.done &&
             +Date.now() - this.UIOpenTime > 100
           ) {
             this.confirmText(ConfirmMode.Cancel)
@@ -458,6 +457,7 @@ export class DialogWindow {
   // Progresses text
   public confirmText(mode: ConfirmMode): void {
     let currentText = this.NPCScript[this.activeTextId]
+	this.UIOpenTime = +Date.now()
 
     // Update active text
     if (mode == ConfirmMode.Next) {

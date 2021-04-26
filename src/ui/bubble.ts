@@ -377,15 +377,15 @@ export class DialogBubble {
    */
   public closeDialogEndAll(): void {
     if (this.isBubleOpen) {
-      this.isBubleOpen = false
-
+    
 	  if(WorldDialogTypeInSystem._instance.Dialog == this){
 		WorldDialogTypeInSystem._instance.done = true
+		WorldDialogTypeInSystem._instance.Dialog = null
 	  }
+	  this.isBubleOpen = false
 
       this.text.getComponent(TextShape).value = ''
       this.text.getComponent(TextShape).visible = false
-
       this.panel.getComponent(PlaneShape).visible = false
 	  
     }
