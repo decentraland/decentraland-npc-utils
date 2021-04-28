@@ -610,7 +610,7 @@ You can open a Dialog window that isn't associated with any `NPC` object in the 
 To create a new dialog window, create a new `DialogWindow` object. This will instantiate the window but keep it hidden until you open it.
 
 ```ts
-let dialogWindow = new ui.DialogWindow()
+let dialogWindow = new DialogWindow()
 ```
 
 <img src="screenshots/NPC1.png" width="500">
