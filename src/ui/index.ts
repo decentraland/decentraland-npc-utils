@@ -405,7 +405,6 @@ export class DialogWindow {
     if (!this.ClickAction) {
       this.ClickAction = Input.instance.subscribe('BUTTON_DOWN', ActionButton.POINTER, false, e => {
         if (!this.isDialogOpen || +Date.now() - this.UIOpenTime < 100) return
-
         if (!DialogTypeInSystem._instance!.done) {
           DialogTypeInSystem._instance!.rush()
           return
@@ -418,14 +417,15 @@ export class DialogWindow {
         ActionButton.PRIMARY,
         false,
         e => {
+		  if (!this.isDialogOpen || +Date.now() - this.UIOpenTime < 100) return
+
           if (
-            this.isDialogOpen &&
-            this.isQuestionPanel &&
-            DialogTypeInSystem._instance!.done &&
-            +Date.now() - this.UIOpenTime > 100
+            this.isQuestionPanel
           ) {
             this.confirmText(ConfirmMode.Confirm)
-          }
+          } else if (!this.isQuestionPanel && !this.isFixedScreen) {
+			this.confirmText(ConfirmMode.Next)
+		  }
         }
       )
       this.FButtonAction = Input.instance.subscribe(
@@ -433,16 +433,14 @@ export class DialogWindow {
         ActionButton.SECONDARY,
         false,
         e => {
+		  if (!this.isDialogOpen || +Date.now() - this.UIOpenTime < 100) return
+
           if (
-            this.isDialogOpen &&
-            this.isQuestionPanel &&
-            +Date.now() - this.UIOpenTime > 100
+            this.isQuestionPanel
           ) {
             this.confirmText(ConfirmMode.Cancel)
           } else if (
-            this.isDialogOpen &&
-            currentText.skipable &&
-            +Date.now() - this.UIOpenTime > 100
+            currentText.skipable && !this.isFixedScreen
           ) {
             this.skipDialogs()
           }
