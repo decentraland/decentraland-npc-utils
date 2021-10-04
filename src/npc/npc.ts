@@ -56,8 +56,9 @@ export class NPC extends Entity {
 
     this.state = NPCState.STANDING
 
-	// dialogs
-	if (data && data.noUI){} else if (data && data.portrait) {
+    // dialogs
+    if (data && data.noUI) {
+    } else if (data && data.portrait) {
       this.dialog = new DialogWindow(
         typeof data.portrait === `string` ? { path: data.portrait } : data.portrait,
         data && data.darkUI ? data.darkUI : false,
@@ -71,21 +72,22 @@ export class NPC extends Entity {
       )
     }
 
-	if (data && data.textBubble) {
-		if (data && data.bubbleHeight) {
-			this.bubbleHeight = data.bubbleHeight
-		  }
-		  this.bubble = new DialogBubble(this, this.bubbleHeight, data.dialogSound ? data.dialogSound : undefined)
-	}
+    if (data && data.textBubble) {
+      if (data && data.bubbleHeight) {
+        this.bubbleHeight = data.bubbleHeight
+      }
+      this.bubble = new DialogBubble(
+        this,
+        this.bubbleHeight,
+        data.dialogSound ? data.dialogSound : undefined
+      )
+    }
 
-	
-
-
-	  // animations
+    // animations
     this.addComponent(new Animator())
 
     this.idleAnim = new AnimationState(data && data.idleAnim ? data.idleAnim : 'Idle', {
-      looping: true
+      looping: true,
     })
     this.getComponent(Animator).addClip(this.idleAnim)
     this.lastPlayedAnim = this.idleAnim
@@ -93,7 +95,7 @@ export class NPC extends Entity {
 
     if (data && data.walkingAnim) {
       this.walkingAnim = new AnimationState(data.walkingAnim, {
-        looping: true
+        looping: true,
       })
       this.getComponent(Animator).addClip(this.walkingAnim)
     }
@@ -118,7 +120,7 @@ export class NPC extends Entity {
     // Reaction when clicked
     this.addComponent(
       new OnPointerDown(
-        e => {
+        (e) => {
           if (this.inCooldown || (this.dialog && this.dialog.isDialogOpen)) return
 
           this.activate()
@@ -126,7 +128,7 @@ export class NPC extends Entity {
         {
           button: activateButton,
           hoverText: data && data.hoverText ? data.hoverText : 'Talk',
-          showFeedback: data && data.onlyExternalTrigger ? false : true
+          showFeedback: data && data.onlyExternalTrigger ? false : true,
         }
       )
     )
@@ -135,61 +137,53 @@ export class NPC extends Entity {
       this.removeComponent(OnPointerDown)
     }
 
-	// Trigger
-	let triggerData: TriggerData = { 
-	}
+    // Trigger
+    let triggerData: TriggerData = {}
 
-	// when exiting trigger
-	if (
-		!data ||
-		(data && !data.continueOnWalkAway)
-	  ) {
-		triggerData.onCameraExit = () => {
-		this.handleWalkAway()
-	  }
-	}
+    // when exiting trigger
+    if (!data || (data && !data.continueOnWalkAway)) {
+      triggerData.onCameraExit = () => {
+        this.handleWalkAway()
+      }
+    }
 
     // when entering trigger
     if (
       !data ||
       (data && !data.onlyExternalTrigger && !data.onlyClickTrigger && !data.onlyETrigger)
     ) {
-		triggerData.onCameraEnter = () => {
-			if (this.inCooldown) {
-			  log(this.name, ' in cooldown')
-			  return
-			} else if (
-			  (this.dialog && this.dialog.isDialogOpen) ||
-			  (data && data.onlyExternalTrigger) ||
-			  (data && data.onlyClickTrigger)
-			) {
-			  return
-			}
-			this.activate()
-		  }
+      triggerData.onCameraEnter = () => {
+        if (this.inCooldown) {
+          log(this.name, ' in cooldown')
+          return
+        } else if (
+          (this.dialog && this.dialog.isDialogOpen) ||
+          (data && data.onlyExternalTrigger) ||
+          (data && data.onlyClickTrigger)
+        ) {
+          return
+        }
+        this.activate()
+      }
     }
 
-	// add trigger
-	if(triggerData.onCameraEnter || triggerData.onCameraExit){
-		this.addComponent(
-			new NPCTriggerComponent(
-			  new TriggerSphereShape(
-				data && data.reactDistance ? data.reactDistance : 6,
-				Vector3.Zero()
-			  ),
-			  triggerData
-			)
-		  )
-	}
-
-
+    // add trigger
+    if (triggerData.onCameraEnter || triggerData.onCameraExit) {
+      this.addComponent(
+        new NPCTriggerComponent(
+          new TriggerSphereShape(
+            data && data.reactDistance ? data.reactDistance : 6,
+            Vector3.Zero()
+          ),
+          triggerData
+        )
+      )
+    }
 
     if (data && data.faceUser) {
       this.addComponent(new TrackUserFlag(true, data.turningSpeed ? data.turningSpeed : undefined))
       this.faceUser = true
     }
-
-
 
     if (data && data.walkingSpeed) {
       this.walkingSpeed = data.walkingSpeed
@@ -232,9 +226,9 @@ export class NPC extends Entity {
     if (this.dialog && this.dialog.isDialogOpen) {
       this.dialog.closeDialogWindow()
     }
-	if(this.bubble && this.bubble.isBubleOpen){
-		this.bubble.closeDialogWindow()
-	}
+    if (this.bubble && this.bubble.isBubleOpen) {
+      this.bubble.closeDialogWindow()
+    }
     this.state = NPCState.STANDING
   }
   /**
@@ -245,9 +239,9 @@ export class NPC extends Entity {
       //|| this.state == NPCState.FOLLOWPLAYER
       return
     }
-   
+
     this.endInteraction()
-    
+
     if (this.onWalkAway) {
       this.onWalkAway()
     }
@@ -266,9 +260,9 @@ export class NPC extends Entity {
       this.closeDialogTimer.removeComponent(NPCDelay)
     }
 
-	if(this.bubble && this.bubble.isBubleOpen){
-		this.bubble.closeDialogWindow()
-	}
+    if (this.bubble && this.bubble.isBubleOpen) {
+      this.bubble.closeDialogWindow()
+    }
 
     this.dialog.openDialogWindow(script, startIndex ? startIndex : 0)
 
@@ -281,26 +275,24 @@ export class NPC extends Entity {
     }
   }
 
-
   /**
    * Starts a conversation, using the Dialog UI
    * @param {Dialog[]} script Instructions to follow during the conversation
    * @param {number|string} startIndex Where to start in the script. Can refer to an index in the array or the `name` field of a Dialog entry.
    *
    */
-   talkBubble(script: Dialog[], startIndex?: number | string) {
+  talkBubble(script: Dialog[], startIndex?: number | string) {
     // this.introduced = true
     // this.state = NPCState.TALKING
     // if (this.closeDialogTimer.hasComponent(NPCDelay)) {
     //   this.closeDialogTimer.removeComponent(NPCDelay)
     // }
 
-	if(!this.bubble){
-		this.bubble = new DialogBubble(this, this.bubbleHeight)
-	}
+    if (!this.bubble) {
+      this.bubble = new DialogBubble(this, this.bubbleHeight)
+    }
 
     this.bubble.openDialogWindow(script, startIndex ? startIndex : 0)
-
   }
 
   /**
@@ -311,7 +303,7 @@ export class NPC extends Entity {
    *
    */
   playAnimation(animationName: string, noLoop?: boolean, duration?: number) {
-    this.lastPlayedAnim.stop()
+    // this.lastPlayedAnim.stop()
     if (this.endAnimTimer.hasComponent(NPCDelay)) {
       this.endAnimTimer.removeComponent(NPCDelay)
     }
@@ -334,25 +326,25 @@ export class NPC extends Entity {
       }
     }
 
-    newAnim.stop()
-    newAnim.play()
+    // newAnim.stop()
+    newAnim.play(true)
     this.lastPlayedAnim = newAnim
   }
 
-/**
+  /**
    * Change the idle animation on the NPC.
    * @param {animation} string Name of the new animation to set as idle.
    * @param {play} boolean If true, start playing this new idle animation.
    */
-  changeIdleAnim(animation: string, play?: boolean){
-	this.idleAnim.stop()
+  changeIdleAnim(animation: string, play?: boolean) {
+    // this.idleAnim.stop()
     this.idleAnim = new AnimationState(animation, { looping: true })
-    this.getComponent(Animator).addClip(this.idleAnim)  
-	if(play){
-		this.lastPlayedAnim.stop()
-		this.idleAnim.play()
-		this.lastPlayedAnim = this.idleAnim
-	}
+    this.getComponent(Animator).addClip(this.idleAnim)
+    if (play) {
+      // this.lastPlayedAnim.stop()
+      this.idleAnim.play()
+      this.lastPlayedAnim = this.idleAnim
+    }
   }
 
   /**
@@ -452,15 +444,12 @@ export class NPC extends Entity {
       lerp.speed.push(1 / ((pointsDist[i] / totalDist) * lerp.totalDuration))
     }
 
-
-		
-
     if (this.walkingAnim) {
-		if(this.endAnimTimer.hasComponent(NPCDelay)){
-			this.endAnimTimer.removeComponent(NPCDelay)
-		}
-      this.idleAnim.stop()
-      this.lastPlayedAnim.stop()
+      if (this.endAnimTimer.hasComponent(NPCDelay)) {
+        this.endAnimTimer.removeComponent(NPCDelay)
+      }
+      //   this.idleAnim.stop()
+      //   this.lastPlayedAnim.stop()
       this.walkingAnim.play()
       this.lastPlayedAnim = this.walkingAnim
     }
@@ -476,7 +465,7 @@ export class NPC extends Entity {
     this.state = NPCState.STANDING
 
     if (this.walkingAnim) {
-      this.walkingAnim.stop()
+      //   this.walkingAnim.stop()
       this.idleAnim.play()
       this.lastPlayedAnim = this.idleAnim
     }
