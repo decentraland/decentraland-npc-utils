@@ -369,7 +369,7 @@ export class NPC extends Entity {
         if (data.curve) {
           let curvedPath = Curve3.CreateCatmullRomSpline(
             data.path,
-            data.nbPoints ? data.nbPoints : data.path.length * 4,
+            data.path.length * 4,
             data.loop ? true : false
           ).getPoints()
           if (data.loop) {
