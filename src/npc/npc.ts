@@ -399,7 +399,8 @@ export class NPC extends Entity {
     }
 
     // add current location to start of path
-    const currentPos = this.getComponent(Transform).position
+    const currentTransform = this.getComponent(Transform)
+    const currentPos = currentTransform.position
 
     const lerpOriginPath = lerp.path[lerp.origin]
     if(lerpOriginPath === undefined){
@@ -412,14 +413,14 @@ export class NPC extends Entity {
         currentPos.subtract(lerpOriginPath).normalize() ==
           lerp.path[lerp.target].subtract(lerpOriginPath).normalize())
     ) {
-      lerp.path.splice(lerp.origin, 0, this.getComponent(Transform).position)
+      lerp.path.splice(lerp.origin, 0, currentPos)
       lerp.fraction = 0
     }
 
     if(lerp.path[lerp.target] === undefined){
       log("npc.utils lerp.path[lerp.target] is null",lerpOriginPath,lerp.origin,lerp.target,lerp.path)
     }
-    this.getComponent(Transform).lookAt(lerp.path[lerp.target])
+    currentTransform.lookAt(lerp.path[lerp.target])
     
     // speed of sections
 
