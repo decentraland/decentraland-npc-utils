@@ -196,12 +196,7 @@ export class NPC extends Entity {
     if (data && data.path) {
       this.addComponent(new NPCLerpData(data.path ? data.path : []))
       this.getComponent(NPCLerpData).loop = true
-      /*if(walkingNPCGroup.indexOf(this) < 0){
-        log("npc.utils adding to walking group")
-        walkingNPCGroup.push(this)
-      }else{
-        log("npc.utils already a member of walking group")
-      }*/
+      
       this.followPath()
     }
   }
@@ -361,12 +356,6 @@ export class NPC extends Entity {
         return
       }
       this.addComponent(new NPCLerpData(data.path ? data.path : []))
-      /*if(walkingNPCGroup.indexOf(this) < 0){
-        log("npc.utils adding to walking group")
-        walkingNPCGroup.push(this)
-      }else{
-        log("npc.utils already a member of walking group")
-      }*/
     }
 
     if (this.faceUser) {
