@@ -403,9 +403,9 @@ export class NPC extends Entity {
 
     const lerpOriginPath = lerp.path[lerp.origin]
     if(lerpOriginPath === undefined){
-      log("npc.utils lerpOriginPath is null",lerpOriginPath,lerp.origin,lerp.target,lerp.path)
+      log("WARNING npc.utils lerpOriginPath is null",lerpOriginPath,lerp.origin,lerp.target,lerp.path)
     }
-    //try{  
+    
     if (
       (lerp.fraction == 0 && lerpOriginPath.subtract(currentPos).lengthSquared() > 0.1) ||
       (lerp.fraction > 0 &&
@@ -420,9 +420,7 @@ export class NPC extends Entity {
       log("npc.utils lerp.path[lerp.target] is null",lerpOriginPath,lerp.origin,lerp.target,lerp.path)
     }
     this.getComponent(Transform).lookAt(lerp.path[lerp.target])
-    //}catch(e){
-    //  log("npc.utils error is null",lerpOriginPath,lerp.origin,lerp.target,lerp.path)
-    //}
+    
     // speed of sections
 
     let totalDist = 0
