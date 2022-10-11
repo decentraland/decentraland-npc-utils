@@ -213,3 +213,9 @@ export enum NPCState {
   FOLLOWPATH = 'followPath'
   //FOLLOWPLAYER = 'followPlayer'
 }
+
+
+export enum NPCLerpType {
+  SMOOTH_PATH = 'smooth', //will follow the path but can cut sharp corners
+  RIGID_PATH = 'rigid', //will ensure each corner is hit
+}
