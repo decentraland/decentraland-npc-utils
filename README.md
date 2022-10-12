@@ -593,13 +593,13 @@ export let GemsMission: Dialog[] = [
 
 #### Skipping Dialogs
 
-Each dialog has an optional `skip` property. If true, a button appears in the bottom-left corner of the dialog window. Players can click this button or press F to skip all the following dialogs.
+Each dialog has an optional `skipable` property. If true, a button appears in the bottom-left corner of the dialog window. Players can click this button or press F to skip all the following dialogs.
 
 When skipping, players will jump forward in the conversation till
 
-- They reach a dialog that doesn't have the `skip` property.
+- They reach a dialog that doesn't have the `skipable` property.
 - They reach a dialog with `isQuestion=true`.
-- They reach a dialog that has the `skip` property and `isEndOfDialog`, in which case the dialog window is closed.
+- They reach a dialog that has the `skipable` property and `isEndOfDialog`, in which case the dialog window is closed.
 
 ## No-NPC Dialogs
 
