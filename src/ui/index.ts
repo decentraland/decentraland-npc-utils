@@ -89,9 +89,9 @@ export class DialogWindow {
   public defaultSound: string | null = null
 
   canvas: UICanvas = canvas
-  ClickAction: null | (() => false | Subscription[]) = null
-  EButtonAction: null | (() => false | Subscription[]) = null
-  FButtonAction: null | (() => false | Subscription[]) = null
+  ClickAction: null | (() => false | Subscription[]| void) = null
+  EButtonAction: null | (() => false | Subscription[]|void) = null
+  FButtonAction: null | (() => false | Subscription[]|void) = null
 
   constructor(
     defaultPortrait?: ImageData,
@@ -109,7 +109,7 @@ export class DialogWindow {
 
     // Container
     this.container = new UIContainerRect(canvas)
-    this.container.adaptWidth = true
+    //this.container.adaptWidth = true
     this.container.width = '100%'
     this.container.vAlign = 'bottom'
     this.container.positionY = 140* UIscaleMultiplier
@@ -179,7 +179,7 @@ export class DialogWindow {
     this.text.vTextAlign = 'center'
     this.text.positionY = textYPos
 
-    this.text.fontWeight = 'normal'
+    //this.text.fontWeight = 'normal'
     this.text.color = useDarkTheme ? Color4.White() : Color4.Black()
     this.text.isPointerBlocker = false
 

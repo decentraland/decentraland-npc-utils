@@ -24,12 +24,13 @@ export class NPCLerpData {
   }
 }
 
-export let walkingNPCGroup: NPC[] = []
+const walkingNPCGroup = engine.getComponentGroup(NPCLerpData)
 
 export class NPCWalkSystem implements ISystem {
   static _instance: NPCWalkSystem | null = null
   update(dt: number) {
-    for (let npc of walkingNPCGroup) {
+    for (let npcE of walkingNPCGroup.entities) {
+      const npc = (npcE as NPC)
       if (npc.state == NPCState.FOLLOWPATH) {
         let transform = npc.getComponent(Transform)
         let path = npc.getComponent(NPCLerpData)

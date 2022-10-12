@@ -120,7 +120,7 @@ export class DialogBubble {
     this.text.getComponent(TextShape).hTextAlign = 'center'
     this.text.getComponent(TextShape).vTextAlign = 'center'
     this.text.getComponent(TextShape).fontSize = textSize
-    this.text.getComponent(TextShape).fontWeight = 'normal'
+    //this.text.getComponent(TextShape).fontWeight = 'normal'
     this.text.getComponent(TextShape).color = Color3.Black()
 	this.text.getComponent(TextShape).visible = false
 

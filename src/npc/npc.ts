@@ -4,7 +4,7 @@ import { TrackUserFlag } from './faceUserSystem'
 
 import { TriggerSphereShape, NPCTriggerComponent } from '../trigger/triggerSystem'
 import { NPCDelay } from '../utils/timerComponents'
-import { NPCLerpData, walkingNPCGroup } from './move'
+import { NPCLerpData } from './move'
 import { DialogBubble } from '../ui/bubble'
 
 /**
@@ -196,7 +196,7 @@ export class NPC extends Entity {
     if (data && data.path) {
       this.addComponent(new NPCLerpData(data.path ? data.path : []))
       this.getComponent(NPCLerpData).loop = true
-      walkingNPCGroup.push(this)
+      
       this.followPath()
     }
   }
@@ -326,7 +326,6 @@ export class NPC extends Entity {
       }
     }
 
-    // newAnim.stop()
     newAnim.play(true)
     this.lastPlayedAnim = newAnim
   }
@@ -357,7 +356,6 @@ export class NPC extends Entity {
         return
       }
       this.addComponent(new NPCLerpData(data.path ? data.path : []))
-      walkingNPCGroup.push(this)
     }
 
     if (this.faceUser) {
@@ -401,20 +399,29 @@ export class NPC extends Entity {
     }
 
     // add current location to start of path
-    let currentPos = this.getComponent(Transform).position
+    const currentTransform = this.getComponent(Transform)
+    const currentPos = currentTransform.position
 
+    const lerpOriginPath = lerp.path[lerp.origin]
+    if(lerpOriginPath === undefined){
+      log("WARNING npc.utils lerpOriginPath is null",lerpOriginPath,lerp.origin,lerp.target,lerp.path)
+    }
+    
     if (
-      (lerp.fraction == 0 && lerp.path[lerp.origin].subtract(currentPos).lengthSquared() > 0.1) ||
+      (lerp.fraction == 0 && lerpOriginPath.subtract(currentPos).lengthSquared() > 0.1) ||
       (lerp.fraction > 0 &&
-        currentPos.subtract(lerp.path[lerp.origin]).normalize() ==
-          lerp.path[lerp.target].subtract(lerp.path[lerp.origin]).normalize())
+        currentPos.subtract(lerpOriginPath).normalize() ==
+          lerp.path[lerp.target].subtract(lerpOriginPath).normalize())
     ) {
-      lerp.path.splice(lerp.origin, 0, this.getComponent(Transform).position)
+      lerp.path.splice(lerp.origin, 0, currentPos)
       lerp.fraction = 0
     }
 
-    this.getComponent(Transform).lookAt(lerp.path[lerp.target])
-
+    if(lerp.path[lerp.target] === undefined){
+      log("npc.utils lerp.path[lerp.target] is null",lerpOriginPath,lerp.origin,lerp.target,lerp.path)
+    }
+    currentTransform.lookAt(lerp.path[lerp.target])
+    
     // speed of sections
 
     let totalDist = 0
