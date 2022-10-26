@@ -139,6 +139,7 @@ export type NPCData = {
   walkingAnim?: string
   walkingSpeed?: number
   path?: Vector3[]
+  pathLerpType?: NPCLerpType
   textBubble?: boolean
   bubbleHeight?: number
   noUI?: boolean
@@ -166,6 +167,7 @@ export type FollowPathData = {
   totalDuration?: number
   speed?: number
   path?: Vector3[]
+  pathLerpType?: NPCLerpType
   onFinishCallback?: () => void
   onReachedPointCallback?: () => void
 }

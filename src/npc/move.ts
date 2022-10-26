@@ -13,8 +13,9 @@ export class NPCLerpData {
   type: NPCLerpType = NPCLerpType.SMOOTH_PATH //default
   onFinishCallback?: () => void
   onReachedPointCallback?: () => void
-  constructor(path: Vector3[]) {
+  constructor(path: Vector3[],type:NPCLerpType=NPCLerpType.SMOOTH_PATH) {
     this.path = path
+    if(type !== undefined) this.type = type
     NPCWalkSystem.createAndAddToEngine()
   }
 

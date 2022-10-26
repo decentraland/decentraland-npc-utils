@@ -196,7 +196,7 @@ export class NPC extends Entity {
     }
 
     if (data && data.path) {
-      this.addComponent(new NPCLerpData(data.path ? data.path : []))
+      this.addComponent(new NPCLerpData(data.path ? data.path : [],data.pathLerpType))
       this.getComponent(NPCLerpData).loop = true
       
       this.followPath()
@@ -357,7 +357,7 @@ export class NPC extends Entity {
       if (!data) {
         return
       }
-      this.addComponent(new NPCLerpData(data.path ? data.path : []))
+      this.addComponent(new NPCLerpData(data.path ? data.path : [],data.pathLerpType))
     }
 
     if (this.faceUser) {
