@@ -135,9 +135,11 @@ export type NPCData = {
   coolDownDuration?: number
   hoverText?: string
   dialogSound?: string
+  dialogCustomTheme?: Texture
   walkingAnim?: string
   walkingSpeed?: number
   path?: Vector3[]
+  pathLerpType?: NPCLerpType
   textBubble?: boolean
   bubbleHeight?: number
   noUI?: boolean
@@ -165,6 +167,7 @@ export type FollowPathData = {
   totalDuration?: number
   speed?: number
   path?: Vector3[]
+  pathLerpType?: NPCLerpType
   onFinishCallback?: () => void
   onReachedPointCallback?: () => void
 }
@@ -212,4 +215,10 @@ export enum NPCState {
   TALKING = 'talking',
   FOLLOWPATH = 'followPath'
   //FOLLOWPLAYER = 'followPlayer'
+}
+
+
+export enum NPCLerpType {
+  SMOOTH_PATH = 'smooth', //will follow the path but can cut sharp corners
+  RIGID_PATH = 'rigid', //will ensure each corner is hit
 }

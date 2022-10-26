@@ -62,13 +62,15 @@ export class NPC extends Entity {
       this.dialog = new DialogWindow(
         typeof data.portrait === `string` ? { path: data.portrait } : data.portrait,
         data && data.darkUI ? data.darkUI : false,
-        data.dialogSound ? data.dialogSound : undefined
+        data.dialogSound ? data.dialogSound : undefined,
+        data && data.dialogCustomTheme ? data.dialogCustomTheme : undefined
       )
     } else {
       this.dialog = new DialogWindow(
         undefined,
         data && data.darkUI ? data.darkUI : false,
-        data && data.dialogSound ? data.dialogSound : undefined
+        data && data.dialogSound ? data.dialogSound : undefined,
+        data && data.dialogCustomTheme ? data.dialogCustomTheme : undefined
       )
     }
 
@@ -194,7 +196,7 @@ export class NPC extends Entity {
     }
 
     if (data && data.path) {
-      this.addComponent(new NPCLerpData(data.path ? data.path : []))
+      this.addComponent(new NPCLerpData(data.path ? data.path : [],data.pathLerpType))
       this.getComponent(NPCLerpData).loop = true
       
       this.followPath()
@@ -355,7 +357,7 @@ export class NPC extends Entity {
       if (!data) {
         return
       }
-      this.addComponent(new NPCLerpData(data.path ? data.path : []))
+      this.addComponent(new NPCLerpData(data.path ? data.path : [],data.pathLerpType))
     }
 
     if (this.faceUser) {
