@@ -135,6 +135,7 @@ export type NPCData = {
   coolDownDuration?: number
   hoverText?: string
   dialogSound?: string
+  dialogCustomTheme?: Texture
   walkingAnim?: string
   walkingSpeed?: number
   path?: Vector3[]
