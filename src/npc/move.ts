@@ -38,7 +38,7 @@ export class NPCWalkSystem implements ISystem {
         let transform = npc.getComponent(Transform)
         let path = npc.getComponent(NPCLerpData)
 
-        if(path.type !== undefined && path.type == NPCLerpType.SMOOTH_PATH){
+        if(path.type !== undefined && path.type == NPCLerpType.RIGID_PATH){
           //stop exactly at each point
           if (path.fraction < 1) {
             path.fraction += dt * path.speed[path.origin]
