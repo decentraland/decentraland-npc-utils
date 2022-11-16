@@ -9,7 +9,8 @@ import {
   ButtonStyles,
   FollowPathData,
   NPCState,
-  TriggerData
+  TriggerData,
+  NPCLerpType
 } from './utils/types'
 import { canvas, SFFont, SFHeavyFont, lightTheme, darkTheme } from './utils/default-ui-components'
 import { TriggerSphereShape, TriggerBoxShape, NPCTriggerComponent } from './trigger/triggerSystem'
@@ -26,6 +27,7 @@ export {
   ImageData,
   ButtonData,
   ButtonStyles,
+  NPCLerpType,
   FollowPathData,
   NPCState,
   canvas,
